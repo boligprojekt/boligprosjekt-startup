@@ -256,9 +256,41 @@ function loadProducts() {
     });
 }
 
+// Rens produktnavn for søk - fjern dimensjoner, volum, og spesifikke detaljer
+function cleanProductNameForSearch(productName) {
+    let cleanName = productName;
+
+    // Fjern dimensjoner (f.eks. 80x80, 90x90, 120x60, osv.)
+    cleanName = cleanName.replace(/\d+x\d+(\s*cm)?/gi, '');
+
+    // Fjern volum/kapasitet (f.eks. 5L, 10 liter, 2,5L, osv.)
+    cleanName = cleanName.replace(/\d+[,.]?\d*\s*(L|liter|ml|milliliter)/gi, '');
+
+    // Fjern høyde/bredde/dybde mål (f.eks. 180cm, 2m, 50 cm, osv.)
+    cleanName = cleanName.replace(/\d+[,.]?\d*\s*(cm|m|mm|meter|centimeter|millimeter)/gi, '');
+
+    // Fjern beskrivende ord som ofte ikke finnes i butikk-søk
+    const wordsToRemove = [
+        'enkel', 'dobbel', 'trippel', 'basis', 'standard', 'premium',
+        'budsjett', 'luksus', 'komplett', 'sett', 'pakke'
+    ];
+
+    wordsToRemove.forEach(word => {
+        const regex = new RegExp(`\\b${word}\\b`, 'gi');
+        cleanName = cleanName.replace(regex, '');
+    });
+
+    // Fjern ekstra mellomrom
+    cleanName = cleanName.replace(/\s+/g, ' ').trim();
+
+    return cleanName;
+}
+
 // Generer søke-URL for butikk
 function generateStoreSearchUrl(productName, storeName) {
-    const searchTerm = encodeURIComponent(productName);
+    // Rens produktnavnet før søk
+    const cleanedName = cleanProductNameForSearch(productName);
+    const searchTerm = encodeURIComponent(cleanedName);
 
     // Butikk-spesifikke søke-URLer
     const storeSearchUrls = {
