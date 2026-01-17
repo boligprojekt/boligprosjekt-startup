@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrer deg - BoligProsjekt</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span class="logo-text">BoligProsjekt</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Tilbake</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Register Form -->
+    <div class="auth-container">
+        <div class="auth-box">
+            <h1 class="auth-title">Kom i gang</h1>
+            <p class="auth-subtitle">Opprett en konto for å lagre og administrere dine prosjekter.</p>
+
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+            <div id="successMessage" class="success-message" style="display: none;"></div>
+
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="fullName" class="form-label">Fullt navn</label>
+                    <input 
+                        type="text" 
+                        id="fullName" 
+                        class="form-input" 
+                        placeholder="Ola Nordmann"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">E-post</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        class="form-input" 
+                        placeholder="din@epost.no"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Passord</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        class="form-input" 
+                        placeholder="Minst 6 tegn"
+                        minlength="6"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Bekreft passord</label>
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        class="form-input" 
+                        placeholder="Gjenta passord"
+                        minlength="6"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn-submit" id="registerBtn">
+                    Opprett konto
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Har du allerede konto? <a href="login.html" class="auth-link">Logg inn her</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">© 2025 BoligProsjekt. Gjør drømmeprosjektet ditt til virkelighet.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        const registerForm = document.getElementById('registerForm');
+        const registerBtn = document.getElementById('registerBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Skjul meldinger
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+
+            // Valider passord
+            if (password !== confirmPassword) {
+                errorMessage.textContent = 'Passordene matcher ikke';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            if (password.length < 6) {
+                errorMessage.textContent = 'Passordet må være minst 6 tegn';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            // Disable knapp
+            registerBtn.disabled = true;
+            registerBtn.textContent = 'Oppretter konto...';
+
+            // Registrer bruker
+            const result = await signUp(email, password, fullName);
+
+            if (result.success) {
+                successMessage.textContent = 'Konto opprettet! Sjekk e-posten din for bekreftelse.';
+                successMessage.style.display = 'block';
+                registerForm.reset();
+                
+                // Redirect til login etter 3 sekunder
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 3000);
+            } else {
+                errorMessage.textContent = result.error || 'Kunne ikke opprette konto';
+                errorMessage.style.display = 'block';
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Opprett konto';
+            }
+        });
+
+        // Sjekk om bruker allerede er innlogget
+        (async () => {
+            const user = await checkAuth();
+            if (user) {
+                window.location.href = 'profil.html';
+            }
+        })();
+    </script>
+</body>
+</html>
+

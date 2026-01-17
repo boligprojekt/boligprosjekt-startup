@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Om oss - BoligProsjekt</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="om.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span class="logo-text">BoligProsjekt</span>
+                </a>
+                <div class="nav-links">
+                    <!-- Will be populated by auth.js -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Content -->
+    <div class="about-container">
+        <div class="container">
+            <!-- Hero Section -->
+            <div class="about-hero">
+                <h1 class="about-title">Om BoligProsjekt</h1>
+                <p class="about-subtitle">
+                    Vi gjør det enkelt å planlegge og budsjettere ditt neste oppussingsprosjekt
+                </p>
+            </div>
+
+            <!-- Mission -->
+            <div class="about-section">
+                <div class="section-content">
+                    <h2 class="section-title">Vår misjon</h2>
+                    <p class="section-text">
+                        BoligProsjekt ble skapt for å hjelpe nordmenn med å planlegge og gjennomføre 
+                        oppussingsprosjekter på en smart og oversiktlig måte. Vi vet at det kan være 
+                        overveldende å starte et prosjekt, og derfor har vi laget en plattform som 
+                        gir deg full kontroll over budsjett og produktvalg.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="features-section">
+                <h2 class="section-title">Hva vi tilbyr</h2>
+                <div class="features-grid">
+                    <div class="feature-box">
+                        <div class="feature-icon">🎯</div>
+                        <h3 class="feature-title">Smart budsjettering</h3>
+                        <p class="feature-text">
+                            Få full oversikt over kostnader og hold deg innenfor budsjettet ditt
+                        </p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon">🏪</div>
+                        <h3 class="feature-title">Ekte produkter</h3>
+                        <p class="feature-text">
+                            Alle produkter er verifisert og tilgjengelig hos ledende norske butikker
+                        </p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon">💾</div>
+                        <h3 class="feature-title">Lagre prosjekter</h3>
+                        <p class="feature-text">
+                            Opprett konto og lagre alle dine prosjekter på ett sted
+                        </p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon">📊</div>
+                        <h3 class="feature-title">Oversiktlig planlegging</h3>
+                        <p class="feature-text">
+                            Se alle produkter og kostnader samlet i en enkel handleliste
+                        </p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">Rask og enkel</h3>
+                        <p class="feature-text">
+                            Få produktforslag på sekunder - ingen komplisert oppsett
+                        </p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon">🔒</div>
+                        <h3 class="feature-title">Trygt og sikkert</h3>
+                        <p class="feature-text">
+                            Dine data er beskyttet med moderne sikkerhetsteknologi
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Partners -->
+            <div class="partners-section">
+                <h2 class="section-title">Våre partnere</h2>
+                <p class="section-subtitle">Vi samarbeider med Norges ledende byggevarekjeder</p>
+                <div class="partners-grid">
+                    <div class="partner-card">🏪 IKEA</div>
+                    <div class="partner-card">🔨 Byggmakker</div>
+                    <div class="partner-card">🚗 Biltema</div>
+                    <div class="partner-card">🛠️ Jula</div>
+                    <div class="partner-card">⚡ Elektroimportøren</div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <h2 class="cta-title">Klar til å starte ditt prosjekt?</h2>
+                <p class="cta-text">Opprett en gratis konto og begynn å planlegge i dag</p>
+                <div class="cta-buttons">
+                    <a href="registrer.html" class="btn-cta-primary">Kom i gang</a>
+                    <a href="index.html" class="btn-cta-secondary">Se kalkulatoren</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">© 2025 BoligProsjekt. Gjør drømmeprosjektet ditt til virkelighet.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>
+

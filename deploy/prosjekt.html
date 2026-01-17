@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ditt Prosjekt - BoligProsjekt</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="prosjekt.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span class="logo-text">BoligProsjekt</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Tilbake</a>
+                    <a href="#" class="btn-primary">Lagre prosjekt</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Project Results -->
+    <div class="project-results">
+        <div class="container">
+            <!-- Project Header -->
+            <div class="project-header">
+                <h1 class="project-title" id="projectTitle">Ditt Prosjekt</h1>
+                <div class="project-info">
+                    <div class="info-item">
+                        <span class="info-label">Kategori:</span>
+                        <span class="info-value" id="categoryName">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Budsjett:</span>
+                        <span class="info-value" id="budgetAmount">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Budget Overview -->
+            <div class="budget-overview">
+                <h2 class="section-subtitle">Budsjettfordeling</h2>
+                <div class="budget-bar">
+                    <div class="budget-used" id="budgetUsed" style="width: 0%"></div>
+                </div>
+                <div class="budget-stats">
+                    <div class="budget-stat">
+                        <span class="budget-stat-label">Totalt budsjett:</span>
+                        <span class="budget-stat-value" id="totalBudget">0 kr</span>
+                    </div>
+                    <div class="budget-stat">
+                        <span class="budget-stat-label">Brukt:</span>
+                        <span class="budget-stat-value" id="usedBudget">0 kr</span>
+                    </div>
+                    <div class="budget-stat">
+                        <span class="budget-stat-label">Gjenstående:</span>
+                        <span class="budget-stat-value" id="remainingBudget">0 kr</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Suggestions -->
+            <div class="product-section">
+                <div class="product-header">
+                    <h2 class="section-subtitle">Anbefalte produkter</h2>
+                    <div class="quality-filter">
+                        <button class="quality-filter-btn" data-quality="budsjett">Budsjett</button>
+                        <button class="quality-filter-btn active" data-quality="standard">Standard</button>
+                        <button class="quality-filter-btn" data-quality="premium">Premium</button>
+                    </div>
+                </div>
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Shopping List -->
+            <div class="shopping-list">
+                <h2 class="section-subtitle">Din handleliste</h2>
+                <div class="list-container" id="shoppingList">
+                    <p class="empty-message">Legg til produkter for å se din handleliste</p>
+                </div>
+                <div class="list-total">
+                    <span class="total-label">Total:</span>
+                    <span class="total-value" id="listTotal">0 kr</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">© 2025 BoligProsjekt. Gjør drømmeprosjektet ditt til virkelighet.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="prosjekt.js"></script>
+</body>
+</html>
+

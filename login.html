@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logg inn - BoligProsjekt</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span class="logo-text">BoligProsjekt</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Tilbake</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Form -->
+    <div class="auth-container">
+        <div class="auth-box">
+            <h1 class="auth-title">Logg inn</h1>
+            <p class="auth-subtitle">Velkommen tilbake! Logg inn for å se dine prosjekter.</p>
+
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+            <div id="successMessage" class="success-message" style="display: none;"></div>
+
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="email" class="form-label">E-post</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        class="form-input" 
+                        placeholder="din@epost.no"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Passord</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        class="form-input" 
+                        placeholder="••••••••"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn-submit" id="loginBtn">
+                    Logg inn
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Har du ikke konto? <a href="registrer.html" class="auth-link">Registrer deg her</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">© 2025 BoligProsjekt. Gjør drømmeprosjektet ditt til virkelighet.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Skjul meldinger
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+
+            // Disable knapp
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Logger inn...';
+
+            // Logg inn
+            const result = await signIn(email, password);
+
+            if (result.success) {
+                successMessage.textContent = 'Innlogging vellykket! Omdirigerer...';
+                successMessage.style.display = 'block';
+                
+                // Redirect til profil
+                setTimeout(() => {
+                    window.location.href = 'profil.html';
+                }, 1500);
+            } else {
+                errorMessage.textContent = result.error || 'Feil e-post eller passord';
+                errorMessage.style.display = 'block';
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Logg inn';
+            }
+        });
+
+        // Sjekk om bruker allerede er innlogget
+        (async () => {
+            const user = await checkAuth();
+            if (user) {
+                window.location.href = 'profil.html';
+            }
+        })();
+    </script>
+</body>
+</html>
+

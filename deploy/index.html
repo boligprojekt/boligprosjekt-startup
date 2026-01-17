@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoligProsjekt - Planlegg ditt drømmeprosjekt</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span class="logo-text">BoligProsjekt</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Kalkulator</a>
+                    <a href="om.html" class="nav-link">Om oss</a>
+                    <a href="login.html" class="nav-link">Logg inn</a>
+                    <a href="registrer.html" class="btn-primary">Kom i gang</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="badge">Norges smarteste oppussingsplanlegger</div>
+                <h1 class="hero-title">Planlegg ditt drømmeprosjekt</h1>
+                <p class="hero-description">
+                    Få smarte forslag til hvordan du kan bruke budsjettet ditt på oppussing.
+                    Vi hjelper deg med å finne de beste produktene fra ledende butikker.
+                </p>
+
+                <!-- Stats -->
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number">2,500+</div>
+                        <div class="stat-label">Prosjekter planlagt</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">45+</div>
+                        <div class="stat-label">Produkter tilgjengelig</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">Norske butikker</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Form -->
+            <div class="form-container">
+                <form id="projectForm">
+                    <!-- Quality Level Selection -->
+                    <div class="form-group">
+                        <label class="form-label">Velg kvalitetsnivå</label>
+                        <p class="form-description">Velg kvalitet basert på ditt budsjett og behov</p>
+                        <div class="quality-grid" id="qualityGrid">
+                            <button type="button" class="quality-btn" data-quality="budsjett">
+                                <div class="quality-name">Budsjett</div>
+                                <div class="quality-desc">Rimelige produkter</div>
+                            </button>
+                            <button type="button" class="quality-btn active" data-quality="standard">
+                                <div class="quality-name">Standard</div>
+                                <div class="quality-desc">God kvalitet til riktig pris</div>
+                            </button>
+                            <button type="button" class="quality-btn" data-quality="premium">
+                                <div class="quality-name">Premium</div>
+                                <div class="quality-desc">Beste kvalitet</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Budget Input -->
+                    <div class="form-group">
+                        <label class="form-label">Hva er ditt budsjett?</label>
+                        <div class="budget-input-wrapper">
+                            <input
+                                type="number"
+                                id="budget"
+                                class="budget-input"
+                                placeholder="50 000"
+                                required
+                            >
+                            <span class="currency">kr</span>
+                        </div>
+                    </div>
+
+                    <!-- Category Selection -->
+                    <div class="form-group">
+                        <label class="form-label">Hva skal du fikse?</label>
+                        <div class="category-grid" id="categoryGrid">
+                            <!-- Categories will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-submit" id="submitBtn" disabled>
+                        Se forslag til prosjektet ditt →
+                    </button>
+                </form>
+            </div>
+
+            <!-- Example Projects -->
+            <div class="example-projects">
+                <h2 class="section-title">Populære prosjekter</h2>
+                <div class="projects-grid" id="popularProjectsGrid">
+                    <!-- Populære prosjekter vil bli lastet dynamisk fra databasen -->
+                    <div class="loading-message">Laster populære prosjekter...</div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="features">
+                <h2 class="section-title">Hvorfor velge BoligProsjekt?</h2>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">✓</div>
+                        <h3 class="feature-title">Ekte produkter</h3>
+                        <p class="feature-description">Alle produkter er verifisert og tilgjengelig i norske butikker</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">💰</div>
+                        <h3 class="feature-title">Smart budsjettering</h3>
+                        <p class="feature-description">Få oversikt over kostnader og hold deg innenfor budsjettet</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">Rask og enkel</h3>
+                        <p class="feature-description">Få produktforslag på sekunder - ingen registrering nødvendig</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">© 2025 BoligProsjekt. Gjør drømmeprosjektet ditt til virkelighet.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
