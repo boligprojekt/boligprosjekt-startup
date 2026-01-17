@@ -135,6 +135,7 @@ async function updateUserProfile(userId, updates) {
 async function updateNavigation() {
     const user = await checkAuth();
     const navLinks = document.querySelector('.nav-links');
+    console.log('Updating navigation - user:', user ? 'logged in' : 'not logged in');
 
     if (!navLinks) return;
 
