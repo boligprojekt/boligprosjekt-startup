@@ -159,7 +159,8 @@ async function updateNavigation() {
         // Bruker er innlogget
         navLinks.innerHTML = `
             <a href="index.html" class="nav-link">Kalkulator</a>
-            <a href="profil.html" class="nav-link">Mine prosjekter</a>
+            <a href="prosjekter.html" class="nav-link">Prosjekter</a>
+            <a href="profil.html" class="nav-link">Min profil</a>
             <a href="#" class="nav-link" onclick="signOut()">Logg ut</a>
             <span class="nav-link" style="color: #0f172a; font-weight: 600;">
                 ${displayName}

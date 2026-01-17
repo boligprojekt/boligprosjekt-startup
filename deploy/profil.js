@@ -267,11 +267,18 @@ function createProjectCard(project) {
     card.innerHTML = `
         <div class="project-card-header">
             <div class="project-icon">${icon}</div>
-            <button class="project-delete-btn" onclick="event.stopPropagation(); deleteProject('${project.id}')" title="Slett prosjekt">
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-            </button>
+            <div class="project-card-actions">
+                <button class="project-privacy-toggle ${project.is_public ? 'public' : 'private'}"
+                        onclick="event.stopPropagation(); toggleProjectPrivacy('${project.id}', ${!project.is_public})"
+                        title="${project.is_public ? 'Gjør privat' : 'Gjør offentlig'}">
+                    ${project.is_public ? '🌐' : '🔒'}
+                </button>
+                <button class="project-delete-btn" onclick="event.stopPropagation(); deleteProject('${project.id}')" title="Slett prosjekt">
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </button>
+            </div>
         </div>
         <h3 class="project-card-title">${project.name}</h3>
         <p class="project-card-category">${categoryName}</p>
@@ -279,7 +286,12 @@ function createProjectCard(project) {
             <span class="budget-label">Budsjett:</span>
             <span class="budget-value">${formatPrice(project.budget)}</span>
         </div>
-        <p class="project-card-date">Opprettet ${createdDate}</p>
+        <div class="project-card-footer">
+            <p class="project-card-date">Opprettet ${createdDate}</p>
+            <span class="project-privacy-badge ${project.is_public ? 'public' : 'private'}">
+                ${project.is_public ? 'Offentlig' : 'Privat'}
+            </span>
+        </div>
     `;
 
     card.addEventListener('click', () => {
@@ -287,6 +299,36 @@ function createProjectCard(project) {
     });
     
     return card;
+}
+
+// Toggle prosjekt privacy
+async function toggleProjectPrivacy(projectId, makePublic) {
+    try {
+        await waitForSupabase();
+
+        const { error } = await supabaseClient
+            .from('projects')
+            .update({ is_public: makePublic })
+            .eq('id', projectId)
+            .eq('user_id', currentUser.id); // Sikre at brukeren eier prosjektet
+
+        if (error) throw error;
+
+        // Last prosjekter på nytt
+        await loadProjects();
+
+        // Vis bekreftelse
+        const message = makePublic
+            ? 'Prosjektet er nå offentlig og synlig for alle brukere'
+            : 'Prosjektet er nå privat og kun synlig for deg';
+
+        // Vis en liten notifikasjon (kan forbedres med en toast-melding)
+        console.log(message);
+
+    } catch (error) {
+        console.error('Feil ved endring av prosjekt-privacy:', error);
+        alert('Kunne ikke endre synlighet. Prøv igjen.');
+    }
 }
 
 // Slett prosjekt

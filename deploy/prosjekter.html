@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prosjekter - BoligProsjekt</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="prosjekter.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span class="logo-text">BoligProsjekt</span>
+                </a>
+                <div class="nav-links">
+                    <!-- Will be populated by auth.js -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Projects Page -->
+    <div class="projects-page">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Oppussingsprosjekter</h1>
+                <p class="page-description">Utforsk prosjekter fra andre brukere og få inspirasjon til ditt neste prosjekt</p>
+            </div>
+
+            <!-- Filters Section -->
+            <div class="filters-section">
+                <div class="filters-header">
+                    <h2 class="filters-title">Filtrer prosjekter</h2>
+                    <button class="btn-reset-filters" onclick="resetFilters()">Nullstill filtre</button>
+                </div>
+
+                <div class="filters-grid">
+                    <!-- Privacy Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">Vis prosjekter</label>
+                        <select id="privacyFilter" class="filter-select" onchange="applyFilters()">
+                            <option value="all">Alle prosjekter</option>
+                            <option value="public">Offentlige prosjekter</option>
+                            <option value="mine">Mine prosjekter</option>
+                        </select>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">Kategori</label>
+                        <select id="categoryFilter" class="filter-select" onchange="applyFilters()">
+                            <option value="all">Alle kategorier</option>
+                            <option value="kjokken">Kjøkken</option>
+                            <option value="bad">Bad</option>
+                            <option value="gulv">Gulv</option>
+                            <option value="maling">Maling</option>
+                            <option value="belysning">Belysning</option>
+                            <option value="vinduer">Vinduer</option>
+                        </select>
+                    </div>
+
+                    <!-- Budget Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">Budsjett</label>
+                        <select id="budgetFilter" class="filter-select" onchange="applyFilters()">
+                            <option value="all">Alle budsjetter</option>
+                            <option value="0-25000">0 - 25 000 kr</option>
+                            <option value="25000-50000">25 000 - 50 000 kr</option>
+                            <option value="50000-100000">50 000 - 100 000 kr</option>
+                            <option value="100000-999999999">100 000 kr+</option>
+                        </select>
+                    </div>
+
+                    <!-- Quality Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">Kvalitetsnivå</label>
+                        <select id="qualityFilter" class="filter-select" onchange="applyFilters()">
+                            <option value="all">Alle nivåer</option>
+                            <option value="budsjett">Budsjett</option>
+                            <option value="standard">Standard</option>
+                            <option value="premium">Premium</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Summary -->
+            <div class="results-summary">
+                <p id="resultsCount">Laster prosjekter...</p>
+            </div>
+
+            <!-- Projects Grid -->
+            <div id="projectsGrid" class="projects-grid">
+                <!-- Projects will be loaded here -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <svg class="empty-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <h3 class="empty-title">Ingen prosjekter funnet</h3>
+                <p class="empty-description">Prøv å endre filtrene dine eller opprett et nytt prosjekt</p>
+                <a href="index.html" class="btn-primary">Opprett nytt prosjekt</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="supabase-client.js"></script>
+    <script src="auth.js"></script>
+    <script src="prosjekter.js"></script>
+</body>
+</html>
+
