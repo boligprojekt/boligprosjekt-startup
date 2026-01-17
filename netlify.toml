@@ -2,7 +2,9 @@
 # Vanilla HTML/CSS/JS - No build process needed
 
 [build]
-  publish = "."
+  base = "deploy"
+  publish = "deploy"
+  command = ""
 
 [[headers]]
   # Security headers
