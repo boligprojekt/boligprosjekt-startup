@@ -104,13 +104,18 @@ async function getUserProfile(userId) {
             .from('user_profiles')
             .select('*')
             .eq('id', userId)
-            .single();
+            .maybeSingle(); // Use maybeSingle instead of single to handle missing rows
 
-        if (error) throw error;
+        if (error) {
+            console.warn('Error fetching profile:', error);
+            // Return empty profile if table doesn't exist or row not found
+            return { success: true, data: null };
+        }
         return { success: true, data };
     } catch (error) {
         console.error('Feil ved henting av profil:', error);
-        return { success: false, error: error.message };
+        // Return empty profile on error instead of failing
+        return { success: true, data: null };
     }
 }
 
@@ -147,13 +152,13 @@ async function updateNavigation() {
         const profileResult = await getUserProfile(user.id);
         console.log('Profile result in navigation:', profileResult);
 
-        const displayName = profileResult.success && profileResult.data?.display_name
-            ? profileResult.data.display_name
-            : profileResult.success && profileResult.data?.full_name
-            ? profileResult.data.full_name
-            : user.user_metadata?.display_name
-            || user.user_metadata?.full_name
-            || user.email.split('@')[0];
+        // Fallback chain for display name
+        const displayName = (profileResult.data?.display_name)
+            || (profileResult.data?.full_name)
+            || (user.user_metadata?.display_name)
+            || (user.user_metadata?.full_name)
+            || (user.email?.split('@')[0])
+            || 'Bruker';
 
         console.log('Final display name in navigation:', displayName);
 
