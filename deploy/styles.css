@@ -450,25 +450,26 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 80px;
+    min-height: 100px;
 }
 
 .store-card:hover {
     border-color: #0f172a;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px);
-    background: #f8fafc;
 }
 
-.store-logo-text {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #0f172a;
-    letter-spacing: -0.02em;
+.store-logo {
+    max-width: 120px;
+    max-height: 60px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transition: all 0.3s;
 }
 
-.store-card:hover .store-logo-text {
-    color: #0066cc;
+.store-card:hover .store-logo {
+    transform: scale(1.05);
 }
 
 .store-name {
