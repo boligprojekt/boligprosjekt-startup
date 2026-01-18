@@ -457,20 +457,18 @@ body {
     border-color: #0f172a;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px);
+    background: #f8fafc;
 }
 
-.store-logo {
-    max-width: 100%;
-    max-height: 50px;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    filter: grayscale(0%);
-    transition: filter 0.3s;
+.store-logo-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.02em;
 }
 
-.store-card:hover .store-logo {
-    filter: grayscale(0%) brightness(1.1);
+.store-card:hover .store-logo-text {
+    color: #0066cc;
 }
 
 .store-name {
