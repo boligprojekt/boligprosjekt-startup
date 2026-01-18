@@ -856,6 +856,22 @@ function getGenericSteps() {
     ];
 }
 
+function getStoreLogo(storeName) {
+    const logos = {
+        'Byggmax': 'https://www.byggmax.no/media/byggmax-logo.svg',
+        'Maxbo': 'https://www.maxbo.no/Static/images/maxbo-logo.svg',
+        'Montér': 'https://www.monter.no/Static/gfx/monter-logo.svg',
+        'IKEA': 'https://www.ikea.com/global/assets/logos/brand/ikea-logo.svg',
+        'Elkjøp': 'https://www.elkjop.no/INTERSHOP/static/WFS/store-elkjop-Site/-/no_NO/images/logo.svg',
+        'Power': 'https://www.power.no/Static/gfx/power-logo.svg',
+        'Expert': 'https://www.expert.no/Static/gfx/expert-logo.svg',
+        'VVS Eksperten': 'https://www.vvseksperten.no/Static/gfx/vvs-logo.svg',
+        'Flisekompaniet': 'https://www.flisekompaniet.no/Static/gfx/flisekompaniet-logo.svg',
+        'Biltema': 'https://www.biltema.no/Static/gfx/biltema-logo.svg'
+    };
+    return logos[storeName] || '';
+}
+
 function generateProductRecommendations() {
     const products = getProductRecommendations();
     const productsSection = document.getElementById('productsList');
@@ -879,12 +895,18 @@ function generateProductRecommendations() {
                     ${product.originalPrice ? `<span class="price-original">${product.originalPrice.toLocaleString('no-NO')} kr</span>` : ''}
                 </div>
                 <div class="product-stores">
-                    ${product.stores.map(store => `
-                        <a href="${store.url}" target="_blank" class="store-link" rel="noopener">
-                            <span class="store-name">${store.name}</span>
-                            <span class="store-price">${store.price.toLocaleString('no-NO')} kr</span>
-                        </a>
-                    `).join('')}
+                    ${product.stores.map(store => {
+                        const logoUrl = getStoreLogo(store.name);
+                        return `
+                            <a href="${store.url}" target="_blank" class="store-link" rel="noopener">
+                                <div class="store-info">
+                                    ${logoUrl ? `<img src="${logoUrl}" alt="${store.name}" class="store-logo" onerror="this.style.display='none'">` : ''}
+                                    <span class="store-name">${store.name}</span>
+                                </div>
+                                <span class="store-price">${store.price.toLocaleString('no-NO')} kr</span>
+                            </a>
+                        `;
+                    }).join('')}
                 </div>
             </div>
         </div>

@@ -474,6 +474,19 @@
     background: #e2e8f0;
 }
 
+.store-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.store-logo {
+    height: 24px;
+    width: auto;
+    max-width: 80px;
+    object-fit: contain;
+}
+
 .store-name {
     font-weight: 600;
     color: #1e293b;
@@ -482,9 +495,10 @@
 .store-price {
     color: #16a34a;
     font-weight: 600;
+    white-space: nowrap;
 }
 
-/* Action Buttons */
+/* Action Buttons - Modern Design */
 .action-buttons {
     display: flex;
     gap: 1rem;
@@ -492,9 +506,70 @@
     margin-top: 3rem;
 }
 
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 0.75rem;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-action svg {
+    flex-shrink: 0;
+}
+
+.btn-action.btn-secondary {
+    background: #64748b;
+    color: white;
+    border-color: #64748b;
+}
+
+.btn-action.btn-secondary:hover {
+    background: #475569;
+    border-color: #475569;
+}
+
+.btn-action.btn-primary {
+    background: #1e293b;
+    color: white;
+    border-color: #1e293b;
+}
+
+.btn-action.btn-primary:hover {
+    background: #0f172a;
+    border-color: #0f172a;
+}
+
+.btn-action.btn-outline {
+    background: white;
+    color: #1e293b;
+    border-color: #e2e8f0;
+}
+
+.btn-action.btn-outline:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
 @media (max-width: 768px) {
     .action-buttons {
         flex-direction: column;
+    }
+
+    .btn-action {
+        width: 100%;
+        justify-content: center;
     }
 
     .product-image-container {

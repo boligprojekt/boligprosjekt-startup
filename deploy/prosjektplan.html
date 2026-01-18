@@ -88,19 +88,32 @@
             <!-- Product Recommendations -->
             <div class="products-section">
                 <h2 class="section-title">Anbefalte produkter</h2>
-                <p class="section-subtitle">Produkter med priser fra norske butikker</p>
+                <p class="section-subtitle">Produkter fra ledende butikker i Norge</p>
                 <div id="productsList" class="products-grid"></div>
             </div>
 
             <!-- Action Buttons -->
             <div class="action-buttons">
-                <button class="btn btn-secondary" onclick="window.location.href='planlegger.html'">
-                    ← Endre plan
+                <button class="btn-action btn-secondary" onclick="window.location.href='planlegger.html'">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Endre plan
                 </button>
-                <button class="btn btn-primary" onclick="savePlan()">
+                <button class="btn-action btn-primary" onclick="savePlan()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                        <polyline points="17 21 17 13 7 13 7 21"/>
+                        <polyline points="7 3 7 8 15 8"/>
+                    </svg>
                     Lagre plan
                 </button>
-                <button class="btn btn-success" onclick="window.print()">
+                <button class="btn-action btn-outline" onclick="window.print()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 6 2 18 2 18 9"/>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                        <rect x="6" y="14" width="12" height="8"/>
+                    </svg>
                     Skriv ut
                 </button>
             </div>
