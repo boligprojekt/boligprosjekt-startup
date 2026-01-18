@@ -82,6 +82,9 @@ export default function Home() {
               <span className="text-xl font-bold text-slate-900">BoligProsjekt</span>
             </Link>
             <div className="flex items-center space-x-6">
+              <Link href="/planlegger" className="text-slate-600 hover:text-slate-900 transition-colors font-medium">
+                🎯 Smart Planlegger
+              </Link>
               <Link href="/kalkulator" className="text-slate-600 hover:text-slate-900 transition-colors font-medium">
                 Kalkulator
               </Link>
@@ -92,10 +95,10 @@ export default function Home() {
                 Logg inn
               </Link>
               <Link
-                href="/registrer"
+                href="/planlegger"
                 className="bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors"
               >
-                Kom i gang
+                Start planlegging →
               </Link>
             </div>
           </div>

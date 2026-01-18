@@ -164,7 +164,6 @@ async function updateNavigation() {
 
         // Bruker er innlogget
         navLinks.innerHTML = `
-            <a href="planlegger.html" class="nav-link">🎯 Smart Planlegger</a>
             <a href="index.html" class="nav-link">Kalkulator</a>
             <a href="prosjekter.html" class="nav-link">Prosjekter</a>
             <a href="profil.html" class="nav-link">Min profil</a>
@@ -176,7 +175,6 @@ async function updateNavigation() {
     } else {
         // Bruker er ikke innlogget
         navLinks.innerHTML = `
-            <a href="planlegger.html" class="nav-link">🎯 Smart Planlegger</a>
             <a href="index.html" class="nav-link">Kalkulator</a>
             <a href="om.html" class="nav-link">Om oss</a>
             <a href="login.html" class="nav-link">Logg inn</a>

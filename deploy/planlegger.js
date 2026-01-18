@@ -160,9 +160,95 @@ function checkBudgetWarning() {
     }
 }
 
-function updateDIYTips() {
-    const tipsText = diyTips[formData.diyLevel] || '';
-    document.getElementById('diyTipsText').textContent = tipsText;
+async function updateDIYTips() {
+    const tipsElement = document.getElementById('diyTipsText');
+
+    // Show loading state
+    tipsElement.innerHTML = '<em>Genererer personlige tips med AI...</em>';
+
+    try {
+        // Generate AI tips using Grok
+        const aiTips = await generateAITips();
+        tipsElement.textContent = aiTips;
+    } catch (error) {
+        console.error('Feil ved generering av AI-tips:', error);
+        // Fallback to static tips
+        const tipsText = diyTips[formData.diyLevel] || '';
+        tipsElement.textContent = tipsText;
+    }
+}
+
+async function generateAITips() {
+    // Check if API key is configured
+    if (!GROK_API_KEY || GROK_API_KEY === 'xai-YOUR_API_KEY_HERE') {
+        // Fallback to static tips if no API key
+        return diyTips[formData.diyLevel] || 'Velg ditt erfaringsnivå for å få personlige tips.';
+    }
+
+    // Build context from form data
+    const context = {
+        boligtype: formData.housingType || 'ukjent',
+        byggeår: formData.buildYear || 'ukjent',
+        rom: formData.roomType || 'ukjent',
+        størrelse: formData.roomSize || 0,
+        tilstand: formData.currentCondition || 'ukjent',
+        budsjett: formData.budget || 0,
+        erfaring: formData.diyLevel
+    };
+
+    const erfaringNivå = {
+        'none': 'nybegynner (aldri pusset opp før)',
+        'beginner': 'noe erfaring (har malt og montert)',
+        'experienced': 'erfaren (kan det meste)'
+    };
+
+    const prompt = `Du er en ekspert på oppussing i Norge. Gi konkrete, realistiske og personlige tips til en person som skal pusse opp.
+
+Kontekst:
+- Boligtype: ${context.boligtype}
+- Byggeår: ${context.byggeår}
+- Rom som skal pusses opp: ${context.rom}
+- Størrelse: ${context.størrelse} kvm
+- Nåværende tilstand: ${context.tilstand}
+- Budsjett: ${context.budsjett.toLocaleString('no-NO')} kr
+- Erfaring: ${erfaringNivå[context.erfaring]}
+
+Gi 2-3 konkrete, praktiske tips på norsk (maks 150 ord). Fokuser på:
+1. Hva personen KAN gjøre selv basert på erfaring
+2. Hva som BØR gjøres av fagfolk
+3. Hvordan spare penger uten å gå på kompromiss med kvalitet
+
+Svar kun med tipsene, ingen introduksjon.`;
+
+    const response = await fetch(GROK_API_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${GROK_API_KEY}`
+        },
+        body: JSON.stringify({
+            model: 'grok-beta',
+            messages: [
+                {
+                    role: 'system',
+                    content: 'Du er en ekspert på oppussing i Norge. Gi alltid konkrete, realistiske og praktiske råd på norsk.'
+                },
+                {
+                    role: 'user',
+                    content: prompt
+                }
+            ],
+            temperature: 0.7,
+            max_tokens: 300
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error(`Grok API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content.trim();
 }
 
 async function submitPlan() {

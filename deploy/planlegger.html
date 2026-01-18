@@ -19,10 +19,10 @@
                     <span class="logo-text">BoligProsjekt</span>
                 </a>
                 <div class="nav-links">
-                    <a href="planlegger.html" class="nav-link active">🎯 Smart Planlegger</a>
                     <a href="index.html" class="nav-link">Kalkulator</a>
                     <a href="om.html" class="nav-link">Om oss</a>
                     <a href="login.html" class="nav-link">Logg inn</a>
+                    <a href="planlegger.html" class="btn-primary">Start planlegging →</a>
                 </div>
             </div>
         </div>
@@ -52,19 +52,19 @@
                         <label class="form-label">Boligtype</label>
                         <div class="option-grid grid-4">
                             <button type="button" class="option-btn" data-value="leilighet">
-                                <div class="option-icon">🏢</div>
+                                <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=300&fit=crop" alt="Leilighet" class="option-image">
                                 <div class="option-name">Leilighet</div>
                             </button>
                             <button type="button" class="option-btn" data-value="enebolig">
-                                <div class="option-icon">🏠</div>
+                                <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop" alt="Enebolig" class="option-image">
                                 <div class="option-name">Enebolig</div>
                             </button>
                             <button type="button" class="option-btn" data-value="rekkehus">
-                                <div class="option-icon">🏘️</div>
+                                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop" alt="Rekkehus" class="option-image">
                                 <div class="option-name">Rekkehus</div>
                             </button>
                             <button type="button" class="option-btn" data-value="hytte">
-                                <div class="option-icon">🏔️</div>
+                                <img src="https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=400&h=300&fit=crop" alt="Hytte" class="option-image">
                                 <div class="option-name">Hytte</div>
                             </button>
                         </div>
@@ -90,27 +90,27 @@
                         <label class="form-label">Velg rom</label>
                         <div class="option-grid grid-3">
                             <button type="button" class="option-btn" data-value="kjokken">
-                                <div class="option-icon">🍳</div>
+                                <img src="https://images.unsplash.com/photo-1556912173-3bb406ef7e77?w=400&h=300&fit=crop" alt="Kjøkken" class="option-image">
                                 <div class="option-name">Kjøkken</div>
                             </button>
                             <button type="button" class="option-btn" data-value="bad">
-                                <div class="option-icon">🚿</div>
+                                <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=400&h=300&fit=crop" alt="Bad" class="option-image">
                                 <div class="option-name">Bad</div>
                             </button>
                             <button type="button" class="option-btn" data-value="stue">
-                                <div class="option-icon">🛋️</div>
+                                <img src="https://images.unsplash.com/photo-1600210492493-0946911123ea?w=400&h=300&fit=crop" alt="Stue" class="option-image">
                                 <div class="option-name">Stue</div>
                             </button>
                             <button type="button" class="option-btn" data-value="soverom">
-                                <div class="option-icon">🛏️</div>
+                                <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=400&h=300&fit=crop" alt="Soverom" class="option-image">
                                 <div class="option-name">Soverom</div>
                             </button>
                             <button type="button" class="option-btn" data-value="gulv">
-                                <div class="option-icon">🪵</div>
+                                <img src="https://images.unsplash.com/photo-1615971677499-5467cbab01c0?w=400&h=300&fit=crop" alt="Gulv" class="option-image">
                                 <div class="option-name">Gulv</div>
                             </button>
                             <button type="button" class="option-btn" data-value="maling">
-                                <div class="option-icon">🎨</div>
+                                <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=400&h=300&fit=crop" alt="Maling" class="option-image">
                                 <div class="option-name">Maling</div>
                             </button>
                         </div>
@@ -168,7 +168,7 @@
                     </div>
 
                     <div id="budgetWarning" class="warning-box" style="display: none;">
-                        <p>⚠️ <strong>Advarsel:</strong> Budsjettet ditt er lavt for dette prosjektet.</p>
+                        <p><strong>Advarsel:</strong> Budsjettet ditt er lavt for dette prosjektet.</p>
                     </div>
                 </div>
 
@@ -180,17 +180,14 @@
                         <label class="form-label">Erfaring med oppussing</label>
                         <div class="option-grid grid-3">
                             <button type="button" class="option-btn" data-value="none">
-                                <div class="option-icon">🆕</div>
                                 <div class="option-name">Nybegynner</div>
                                 <div class="option-desc">Aldri pusset opp før</div>
                             </button>
                             <button type="button" class="option-btn" data-value="beginner">
-                                <div class="option-icon">🔨</div>
                                 <div class="option-name">Noe erfaring</div>
                                 <div class="option-desc">Har malt og montert</div>
                             </button>
                             <button type="button" class="option-btn" data-value="experienced">
-                                <div class="option-icon">⚡</div>
                                 <div class="option-name">Erfaren</div>
                                 <div class="option-desc">Kan det meste</div>
                             </button>
@@ -198,8 +195,8 @@
                     </div>
 
                     <div class="info-box" id="diyTips">
-                        <h3 class="info-title">💡 Tips:</h3>
-                        <p id="diyTipsText">Velg ditt erfaringsnivå for å få personlige tips.</p>
+                        <h3 class="info-title">Personlige tips:</h3>
+                        <p id="diyTipsText">Velg ditt erfaringsnivå for å få AI-genererte personlige tips.</p>
                     </div>
                 </div>
             </div>
