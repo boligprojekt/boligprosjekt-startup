@@ -47,12 +47,12 @@ function updateHeader() {
 function generateWarnings() {
     const warnings = analyzeRisks();
     const warningsSection = document.getElementById('warningsSection');
-    
+
     if (warnings.length === 0) {
         warningsSection.style.display = 'none';
         return;
     }
-    
+
     warningsSection.innerHTML = warnings.map(warning => `
         <div class="warning-card ${warning.level}">
             <div class="warning-title">${warning.title}</div>
@@ -64,7 +64,7 @@ function generateWarnings() {
 
 function analyzeRisks() {
     const warnings = [];
-    
+
     // Budget warnings
     const budgetLimits = {
         bad: 80000,
@@ -72,38 +72,38 @@ function analyzeRisks() {
         gulv: 20000,
         maling: 10000
     };
-    
+
     const minBudget = budgetLimits[planData.roomType] || 20000;
-    
+
     if (planData.budget < minBudget) {
         warnings.push({
             level: 'critical',
-            title: '🚨 Kritisk lavt budsjett',
+            title: 'KRITISK: Lavt budsjett',
             message: `Budsjettet ditt (${planData.budget.toLocaleString('no-NO')} kr) er under anbefalt minimum (${minBudget.toLocaleString('no-NO')} kr).`,
             recommendation: 'Vurder å øke budsjettet eller redusere omfanget. Å spare på feil ting kan koste deg 2-3x mer senere.'
         });
     }
-    
+
     // DIY warnings for critical rooms
     if (planData.roomType === 'bad' && planData.diyLevel !== 'none') {
         warnings.push({
             level: 'critical',
-            title: '🚨 Høyrisiko-advarsel: Baderom',
+            title: 'ADVARSEL: Baderom krever fagfolk',
             message: 'Du har valgt å gjøre noe av arbeidet selv på badet. Dette er høyrisiko!',
             recommendation: 'Bruk ALLTID sertifisert rørlegger og elektriker. Vannskader kan koste 100 000+ kr å fikse.'
         });
     }
-    
+
     // Savings opportunities
     if (planData.roomType === 'maling' && planData.diyLevel === 'none') {
         warnings.push({
             level: 'info',
-            title: '💰 Stort sparepotensial',
+            title: 'TIPS: Stort sparepotensial',
             message: 'Maling er perfekt for egeninnsats! Du kan spare 10 000-20 000 kr.',
             recommendation: 'Vurder å gjøre malingen selv. Det er enkelt og du sparer mye penger.'
         });
     }
-    
+
     return warnings;
 }
 
@@ -205,10 +205,10 @@ function generateSavingsRecommendations() {
     const savings = getSavingsRecommendations();
 
     const saveOnList = document.getElementById('saveOnList');
-    saveOnList.innerHTML = savings.saveOn.map(item => `<li>✅ ${item}</li>`).join('');
+    saveOnList.innerHTML = savings.saveOn.map(item => `<li>${item}</li>`).join('');
 
     const dontSaveOnList = document.getElementById('dontSaveOnList');
-    dontSaveOnList.innerHTML = savings.dontSaveOn.map(item => `<li>🚨 ${item}</li>`).join('');
+    dontSaveOnList.innerHTML = savings.dontSaveOn.map(item => `<li>${item}</li>`).join('');
 }
 
 function getSavingsRecommendations() {
@@ -276,13 +276,13 @@ function generateSteps() {
             </div>
             <div class="step-description">${step.description}</div>
             <div class="step-meta">
-                <span>⏱️ ${step.estimatedTime} ${step.estimatedTime === 1 ? 'uke' : 'uker'}</span>
-                <span>${step.requiresProfessional ? '👷 Krever fagperson' : step.canDIY ? '🔨 Kan gjøres selv' : ''}</span>
+                <span>Tid: ${step.estimatedTime} ${step.estimatedTime === 1 ? 'uke' : 'uker'}</span>
+                <span>${step.requiresProfessional ? 'Krever fagperson' : step.canDIY ? 'Kan gjøres selv' : ''}</span>
                 <span class="risk-badge ${step.riskLevel}">${getRiskLabel(step.riskLevel)}</span>
             </div>
             ${step.tips.length > 0 ? `
                 <div class="step-tips">
-                    <div class="step-tips-title">💡 Tips:</div>
+                    <div class="step-tips-title">Tips:</div>
                     <ul>
                         ${step.tips.map(tip => `<li>${tip}</li>`).join('')}
                     </ul>
@@ -294,10 +294,10 @@ function generateSteps() {
 
 function getRiskLabel(level) {
     const labels = {
-        low: '✅ Lav risiko',
-        medium: '⚠️ Middels risiko',
-        high: '🔶 Høy risiko',
-        critical: '🚨 Kritisk'
+        low: 'Lav risiko',
+        medium: 'Middels risiko',
+        high: 'Høy risiko',
+        critical: 'KRITISK'
     };
     return labels[level] || level;
 }
@@ -314,79 +314,749 @@ function getProjectSteps() {
 }
 
 function getBathroomSteps() {
+    const budget = planData.budget;
     return [
         {
             step: 1,
             title: 'Planlegging og forberedelse',
-            description: 'Tegn opp rommet, bestill håndverkere',
+            description: 'Tegn opp rommet i detalj. Mål nøye og planlegg plassering av toalett, servant, dusj/badekar. Bestill håndverkere (rørlegger, elektriker, flislegger) - de har ofte 4-8 ukers ventetid. Søk om tillatelse hvis nødvendig.',
+            estimatedCost: 0,
+            estimatedTime: 2,
+            riskLevel: 'low',
+            requiresProfessional: false,
+            canDIY: true,
+            tips: [
+                'Bestill rørlegger og elektriker NÅ - lang ventetid',
+                'Ta bilder og video av alt før du starter',
+                'Sjekk om du trenger byggetillatelse (vanligvis ikke for bad)',
+                'Lag detaljert tegning med mål - bruk gratis verktøy som SketchUp'
+            ]
+        },
+        {
+            step: 2,
+            title: 'Riving og fjerning',
+            description: 'Riv ut gammelt bad. Fjern fliser, membran, sanitærutstyr. Sjekk tilstanden på underlag og vegger. Dette er tungt arbeid men kan gjøres selv for å spare penger.',
+            estimatedCost: Math.round(budget * 0.05),
+            estimatedTime: 1,
+            riskLevel: 'medium',
+            requiresProfessional: false,
+            canDIY: true,
+            tips: [
+                'Leie container for avfall (ca 3000-5000 kr)',
+                'Bruk støvmaske og vernebriller',
+                'Sjekk for asbest i eldre hus (før 1980)',
+                'Steng av vann og strøm før du starter',
+                'Spar penger: Gjør dette selv og spar 10 000-15 000 kr'
+            ]
+        },
+        {
+            step: 3,
+            title: 'Rørleggerarbeid - Grovarbeid',
+            description: 'Rørlegger legger nye rør for vann og avløp. Dette inkluderer kaldtvann, varmtvann, og avløp til toalett, servant, dusj. KRITISK: Må gjøres av sertifisert rørlegger.',
+            estimatedCost: Math.round(budget * 0.15),
+            estimatedTime: 2,
+            riskLevel: 'critical',
+            requiresProfessional: true,
+            canDIY: false,
+            tips: [
+                'Bruk ALLTID sertifisert rørlegger - ikke spar her!',
+                'Få skriftlig tilbud og kontrakt',
+                'Krev 5 års garanti på arbeidet',
+                'Sjekk at rørlegger har ansvarsforsikring',
+                'Lekkasjer kan koste 100 000-300 000 kr å fikse'
+            ]
+        },
+        {
+            step: 4,
+            title: 'Elektrisk arbeid',
+            description: 'Elektriker trekker nye kabler for lys, vifte, varmekabler i gulv, og stikkontakter. Baderom har strenge krav til jordfeilbryter og IP-klasser. KRITISK: Må gjøres av autorisert elektriker.',
+            estimatedCost: Math.round(budget * 0.08),
+            estimatedTime: 1,
+            riskLevel: 'critical',
+            requiresProfessional: true,
+            canDIY: false,
+            tips: [
+                'Bruk ALLTID autorisert elektriker',
+                'Krev ferdigattest etter arbeidet',
+                'Planlegg ekstra stikkontakter - bedre med for mange enn for få',
+                'Vurder gulvvarme - koster 3000-5000 kr ekstra men gir mye komfort'
+            ]
+        },
+        {
+            step: 5,
+            title: 'Membran og våtromssikring',
+            description: 'Legg membran på gulv og vegger (minimum 20cm opp fra gulv, 200cm i dusjsone). Dette er den VIKTIGSTE delen - feil her gir vannskader. Bruk sertifisert våtromsbygger eller flislegger med dokumentert erfaring.',
+            estimatedCost: Math.round(budget * 0.08),
+            estimatedTime: 2,
+            riskLevel: 'critical',
+            requiresProfessional: true,
+            canDIY: false,
+            tips: [
+                'Membran MÅ legges 100% riktig - vannskader koster 100 000-300 000 kr',
+                'Bruk kun godkjente membransystemer (Mapei, Weber, Kerakoll)',
+                'Krev 10 års garanti på membranarbeid',
+                'Sjekk at håndverker har våtromssertifikat',
+                'IKKE spar penger her - dette er fundamentet for hele badet'
+            ]
+        },
+        {
+            step: 6,
+            title: 'Flislegging',
+            description: 'Legg fliser på gulv og vegger. Velg sklisikre gulvfliser (R10-R11). Veggfliser kan være mer dekorative. Bruk fleksibel flislim og fuge for å unngå sprekker.',
+            estimatedCost: Math.round(budget * 0.12),
+            estimatedTime: 3,
+            riskLevel: 'medium',
+            requiresProfessional: true,
+            canDIY: false,
+            tips: [
+                'Velg store fliser (30x60 eller større) - færre fuger, enklere renhold',
+                'Gulvfliser MÅ være sklisikre (R10 minimum)',
+                'Bruk fleksibel lim og fuge - forhindrer sprekker',
+                'Spar penger: Velg enkle fliser istedenfor mønster - spar 5000-10 000 kr',
+                'Kan gjøres selv hvis erfaren, men anbefaler fagperson'
+            ]
+        },
+        {
+            step: 7,
+            title: 'Montering av sanitærutstyr',
+            description: 'Monter toalett, servant, dusjkabinett/badekar, blandebatterier. Rørlegger kobler til vann og avløp. Sjekk at alt er tett og fungerer.',
+            estimatedCost: Math.round(budget * 0.15),
+            estimatedTime: 1,
+            riskLevel: 'medium',
+            requiresProfessional: true,
+            canDIY: false,
+            tips: [
+                'Rørlegger må koble til vann og avløp',
+                'Test GRUNDIG for lekkasjer før du lukker vegger',
+                'Spar penger: Kjøp sanitærutstyr selv på tilbud - spar 5000-15 000 kr',
+                'IKEA, Byggmax, Maxbo har gode tilbud på servant og toalett'
+            ]
+        },
+        {
+            step: 8,
+            title: 'Maling og finish',
+            description: 'Mal tak og eventuelle vegger som ikke er flislagt. Bruk fuktsikker maling (baderomsm aling). Monter speil, skap, hyller, håndkleholder. Dette kan du gjøre selv!',
+            estimatedCost: Math.round(budget * 0.05),
+            estimatedTime: 1,
+            riskLevel: 'low',
+            requiresProfessional: false,
+            canDIY: true,
+            tips: [
+                'Bruk fuktsikker baderomsm aling på tak',
+                'Spar penger: Mal selv og monter skap/speil - spar 5000-8000 kr',
+                'IKEA har gode og rimelige baderomskap',
+                'Kjøp LED-speil med integrert lys - gir bedre lys'
+            ]
+        },
+        {
+            step: 9,
+            title: 'Sluttbefaring og rydding',
+            description: 'Gjennomgå alt med håndverkerne. Sjekk at alt fungerer. Test dusjdør, toalett, servant, ventilasjon. Få alle garantidokumenter og fakturaer. Rydd og gjør rent.',
             estimatedCost: 0,
             estimatedTime: 1,
             riskLevel: 'low',
             requiresProfessional: false,
             canDIY: true,
-            tips: ['Bestill rørlegger NÅ - lang ventetid', 'Ta bilder før du starter']
-        },
-        {
-            step: 2,
-            title: 'Rørleggerarbeid',
-            description: 'Ny rørlegging, avløp og vannforsyning',
-            estimatedCost: Math.round(planData.budget * 0.2),
-            estimatedTime: 2,
-            riskLevel: 'critical',
-            requiresProfessional: true,
-            canDIY: false,
-            tips: ['Bruk ALLTID sertifisert rørlegger', 'Få skriftlig garanti']
-        },
-        {
-            step: 3,
-            title: 'Membran og våtromssikring',
-            description: 'Legg membran på gulv og vegger',
-            estimatedCost: Math.round(planData.budget * 0.1),
-            estimatedTime: 1,
-            riskLevel: 'critical',
-            requiresProfessional: true,
-            canDIY: false,
-            tips: ['Membran MÅ legges riktig', 'Vannskader koster 100 000+ kr']
+            tips: [
+                'Lag en sjekkliste og gå gjennom alt systematisk',
+                'Test dusj i 10 minutter - sjekk for lekkasjer',
+                'Få kopi av alle garantier og fakturaer',
+                'Ta bilder av ferdig resultat',
+                'Vent 24 timer før du bruker badet første gang'
+            ]
         }
     ];
 }
 
 function getKitchenSteps() {
+    const budget = planData.budget;
     return [
         {
             step: 1,
-            title: 'Planlegging',
-            description: 'Tegn opp kjøkken, bestill skap',
+            title: 'Planlegging og design',
+            description: 'Tegn opp kjøkkenet i detalj. Planlegg arbeidsflyt (kjøleskap → vask → komfyr). Mål nøye - feil mål er dyrt! Bestill kjøkkenskap (IKEA, HTH, Sigdal) - leveringstid 4-8 uker.',
             estimatedCost: 0,
+            estimatedTime: 2,
+            riskLevel: 'low',
+            requiresProfessional: false,
+            canDIY: true,
+            tips: [
+                'Bruk IKEA sin gratis kjøkkenplanlegger',
+                'Mål 3 ganger - bestill 1 gang!',
+                'Tenk arbeidsflyt: Kjøleskap → Vask → Komfyr (arbeidstrekant)',
+                'Planlegg nok stikkontakter (minimum 6-8 på kjøkken)',
+                'Bestill skap NÅ - lang leveringstid'
+            ]
+        },
+        {
+            step: 2,
+            title: 'Riving av gammelt kjøkken',
+            description: 'Riv ut gamle skap, benkeplate, hvitevarer. Fjern fliser hvis nødvendig. Dette kan du gjøre selv for å spare penger. Vær forsiktig med rør og elektriske ledninger.',
+            estimatedCost: Math.round(budget * 0.03),
+            estimatedTime: 1,
+            riskLevel: 'medium',
+            requiresProfessional: false,
+            canDIY: true,
+            tips: [
+                'Steng av vann og strøm før du starter',
+                'Ta bilder av rørplassering før du river',
+                'Spar penger: Gjør dette selv - spar 8000-12 000 kr',
+                'Selg gamle hvitevarer på Finn.no',
+                'Leie container (ca 2000-3000 kr)'
+            ]
+        },
+        {
+            step: 3,
+            title: 'Elektrisk arbeid',
+            description: 'Elektriker trekker nye kabler for komfyr, oppvaskmaskin, kjøleskap, belysning. Moderne kjøkken trenger mange stikkontakter. VIKTIG: Komfyr krever egen sikring.',
+            estimatedCost: Math.round(budget * 0.08),
+            estimatedTime: 1,
+            riskLevel: 'critical',
+            requiresProfessional: true,
+            canDIY: false,
+            tips: [
+                'Bruk autorisert elektriker',
+                'Komfyr MÅ ha egen sikring (16A eller 20A)',
+                'Planlegg minimum 6-8 stikkontakter',
+                'Vurder USB-lader i vegg - praktisk!',
+                'Krev ferdigattest'
+            ]
+        },
+        {
+            step: 4,
+            title: 'Rørleggerarbeid',
+            description: 'Rørlegger kobler til vann for oppvaskmaskin, kjøkkenvask, eventuelt kjøleskap med isbiter. Sjekk at avløp fungerer godt.',
+            estimatedCost: Math.round(budget * 0.06),
+            estimatedTime: 1,
+            riskLevel: 'high',
+            requiresProfessional: true,
+            canDIY: false,
+            tips: [
+                'Bruk sertifisert rørlegger',
+                'Vurder ekstra vannuttak for kjøleskap',
+                'Sjekk at avløp har riktig fall',
+                'Krev garanti på arbeidet'
+            ]
+        },
+        {
+            step: 5,
+            title: 'Montering av kjøkkenskap',
+            description: 'Monter underskap, overskap, høyskap. Start med underskap, deretter overskap. Bruk vater for å sikre at alt er rett. Dette kan du gjøre selv hvis du er erfaren!',
+            estimatedCost: Math.round(budget * 0.35),
+            estimatedTime: 2,
+            riskLevel: 'medium',
+            requiresProfessional: false,
+            canDIY: true,
+            tips: [
+                'Spar penger: Monter IKEA-kjøkken selv - spar 15 000-25 000 kr',
+                'Bruk vater og målebånd - alt MÅ være rett',
+                'Start med underskap, deretter overskap',
+                'IKEA har gode monteringsvideo er på YouTube',
+                'Leie verktøy hvis du ikke har (sag, drill, vater)'
+            ]
+        },
+        {
+            step: 6,
+            title: 'Montering av benkeplate',
+            description: 'Monter benkeplate. Laminat kan du montere selv, stein/kompositt bør monteres av fagperson. Kapp ut hull for vask og komfyr. Tett godt mot vegg.',
+            estimatedCost: Math.round(budget * 0.15),
+            estimatedTime: 1,
+            riskLevel: 'medium',
+            requiresProfessional: false,
+            canDIY: true,
+            tips: [
+                'Laminat: Kan monteres selv - spar 3000-5000 kr',
+                'Stein/kompositt: Bruk fagperson - tungt og vanskelig',
+                'Tett godt mot vegg med silikon',
+                'Spar penger: Velg laminat istedenfor stein - spar 10 000-20 000 kr',
+                'IKEA har gode laminatbenker til 2000-4000 kr'
+            ]
+        },
+        {
+            step: 7,
+            title: 'Montering av hvitevarer',
+            description: 'Monter komfyr, oppvaskmaskin, kjøleskap, ventilator. Elektriker og rørlegger kobler til. Sjekk at alt fungerer før du lukker skap.',
+            estimatedCost: Math.round(budget * 0.20),
+            estimatedTime: 1,
+            riskLevel: 'medium',
+            requiresProfessional: true,
+            canDIY: false,
+            tips: [
+                'Spar penger: Kjøp hvitevarer på Black Friday - spar 5000-15 000 kr',
+                'Elkjøp, Power, Expert har gode tilbud',
+                'Velg energiklasse A+++ - sparer strøm',
+                'Elektriker MÅ koble til komfyr',
+                'Test alt grundig før du lukker skap'
+            ]
+        },
+        {
+            step: 8,
+            title: 'Flislegging og maling',
+            description: 'Legg fliser på vegg bak benk (sprøytsone). Mal vegger og tak. Bruk kjøkkenmaling som tåler fukt og fett. Dette kan du gjøre selv!',
+            estimatedCost: Math.round(budget * 0.08),
             estimatedTime: 1,
             riskLevel: 'low',
             requiresProfessional: false,
             canDIY: true,
-            tips: ['Mål nøye', 'Tenk på arbeidsflyt']
+            tips: [
+                'Spar penger: Mal og flis selv - spar 5000-8000 kr',
+                'Bruk kjøkkenmaling (tåler fukt og fett)',
+                'Fliser bak benk: Velg enkle, store fliser',
+                'Alternativ til fliser: Glassplate (2000-4000 kr)'
+            ]
+        },
+        {
+            step: 9,
+            title: 'Finish og detaljer',
+            description: 'Monter håndtak, sokkel, lister. Tett alle overganger med silikon. Monter belysning under overskap. Rydd og gjør rent. Nyt ditt nye kjøkken!',
+            estimatedCost: Math.round(budget * 0.05),
+            estimatedTime: 1,
+            riskLevel: 'low',
+            requiresProfessional: false,
+            canDIY: true,
+            tips: [
+                'LED-list under overskap gir godt arbeidslys (500-1500 kr)',
+                'Bruk god silikon - billig silikon gulner',
+                'Spar penger: Monter håndtak selv',
+                'Vent 24 timer med å bruke kjøkkenet etter silikon',
+                'Ta bilder av ferdig resultat!'
+            ]
         }
     ];
 }
 
 function getGenericSteps() {
+    const budget = planData.budget;
+    const roomType = planData.roomType;
+
+    if (roomType === 'gulv') {
+        return [
+            {
+                step: 1,
+                title: 'Planlegging og måling',
+                description: 'Mål rommet nøye. Beregn antall kvadratmeter + 10% ekstra for svinn. Velg gulvtype (laminat, parkett, vinyl). Bestill gulv - leveringstid 1-3 uker.',
+                estimatedCost: 0,
+                estimatedTime: 1,
+                riskLevel: 'low',
+                requiresProfessional: false,
+                canDIY: true,
+                tips: [
+                    'Mål rommet nøye - lengde x bredde + 10% ekstra',
+                    'Laminat: Billigst og enklest (200-400 kr/m²)',
+                    'Parkett: Dyrere men mer eksklusivt (400-800 kr/m²)',
+                    'Vinyl: Vanntett, perfekt for kjøkken/bad (300-600 kr/m²)'
+                ]
+            },
+            {
+                step: 2,
+                title: 'Fjerning av gammelt gulv',
+                description: 'Fjern gammelt gulv, teppegulv eller linoleum. Sjekk at undergulvet er plant og tørt. Reparer eventuelle skader. Dette kan du gjøre selv!',
+                estimatedCost: Math.round(budget * 0.05),
+                estimatedTime: 1,
+                riskLevel: 'low',
+                requiresProfessional: false,
+                canDIY: true,
+                tips: [
+                    'Spar penger: Gjør dette selv - spar 5000-8000 kr',
+                    'Leie container for avfall (2000-3000 kr)',
+                    'Sjekk for asbest i eldre hus (før 1980)',
+                    'Undergulv må være plant (max 3mm ujevnhet per meter)'
+                ]
+            },
+            {
+                step: 3,
+                title: 'Legging av underlag',
+                description: 'Legg lydreduserende underlag. Dette gir bedre lyd og komfort. Enkel jobb som kan gjøres selv.',
+                estimatedCost: Math.round(budget * 0.10),
+                estimatedTime: 1,
+                riskLevel: 'low',
+                requiresProfessional: false,
+                canDIY: true,
+                tips: [
+                    'Bruk fuktsikker underlag i kjøkken/bad',
+                    'Legg underlaget vinkelrett på gulvretningen',
+                    'Teip skjøtene med tape',
+                    'Koster ca 50-100 kr/m²'
+                ]
+            },
+            {
+                step: 4,
+                title: 'Legging av gulv',
+                description: 'Legg gulvet med klikksystem. Start fra en rett vegg. Bruk avstandsklosser mot vegg (8-10mm). Laminat og vinyl kan du legge selv!',
+                estimatedCost: Math.round(budget * 0.70),
+                estimatedTime: 1,
+                riskLevel: 'medium',
+                requiresProfessional: false,
+                canDIY: true,
+                tips: [
+                    'Spar penger: Legg laminat/vinyl selv - spar 10 000-20 000 kr',
+                    'Start fra lengste, retteste vegg',
+                    'Bruk avstandsklosser (8-10mm) mot alle vegger',
+                    'Kapp siste rad med sag eller gulvkniv',
+                    'YouTube har gode veiledninger for gulvlegging'
+                ]
+            },
+            {
+                step: 5,
+                title: 'Montering av lister',
+                description: 'Monter gulvlister langs alle vegger. Skjuler ekspansjonsfugen og gir pent resultat. Kan gjøres selv!',
+                estimatedCost: Math.round(budget * 0.15),
+                estimatedTime: 1,
+                riskLevel: 'low',
+                requiresProfessional: false,
+                canDIY: true,
+                tips: [
+                    'Velg lister som matcher gulvet',
+                    'Bruk lim eller spiker (spiker er enklest)',
+                    'Kapp hjørner i 45 grader for pent resultat',
+                    'Koster ca 30-80 kr per meter'
+                ]
+            }
+        ];
+    }
+
+    if (roomType === 'maling') {
+        return [
+            {
+                step: 1,
+                title: 'Planlegging og innkjøp',
+                description: 'Beregn hvor mye maling du trenger (1 liter dekker ca 8-10 m²). Velg farge og kvalitet. Kjøp pensler, ruller, tape, sparkelmasse.',
+                estimatedCost: Math.round(budget * 0.40),
+                estimatedTime: 1,
+                riskLevel: 'low',
+                requiresProfessional: false,
+                canDIY: true,
+                tips: [
+                    'Beregn: (Lengde x Høyde x 2) + (Bredde x Høyde x 2) = m²',
+                    '1 liter maling dekker ca 8-10 m²',
+                    'Kjøp god maling - billig maling krever flere strøk',
+                    'Jotun Lady, Beckers, Nordsjø er gode merker',
+                    'Spar penger: Kjøp på tilbud - spar 20-30%'
+                ]
+            },
+            {
+                step: 2,
+                title: 'Forberedelse av rom',
+                description: 'Flytt møbler ut eller samle i midten. Dekk gulv med plast. Tape vinduer, dører, lister. Vask vegger. Sparkle hull og sprekker.',
+                estimatedCost: Math.round(budget * 0.10),
+                estimatedTime: 1,
+                riskLevel: 'low',
+                requiresProfessional: false,
+                canDIY: true,
+                tips: [
+                    'God forberedelse = halvparten av jobben!',
+                    'Vask vegger med såpe og vann',
+                    'Sparkle alle hull og sprekker',
+                    'Slip sparkel når tørr (P120 sandpapir)',
+                    'Tape nøye - spar tid senere'
+                ]
+            },
+            {
+                step: 3,
+                title: 'Grunnmaling',
+                description: 'Mal tak først, deretter vegger. Bruk rulle for store flater, pensel i hjørner. La tørke 4-6 timer mellom strøk.',
+                estimatedCost: Math.round(budget * 0.20),
+                estimatedTime: 1,
+                riskLevel: 'low',
+                requiresProfessional: false,
+                canDIY: true,
+                tips: [
+                    'Mal TAK først, deretter vegger',
+                    'Bruk rulle for store flater (raskere)',
+                    'Bruk pensel i hjørner og langs lister',
+                    'Mal i W-form for jevn fordeling',
+                    'La tørke 4-6 timer mellom strøk'
+                ]
+            },
+            {
+                step: 4,
+                title: 'Toppstrøk',
+                description: 'Mal andre strøk (toppstrøk). Dette gir jevn farge og god dekning. Fjern tape mens maling er litt fuktig for best resultat.',
+                estimatedCost: Math.round(budget * 0.20),
+                estimatedTime: 1,
+                riskLevel: 'low',
+                requiresProfessional: false,
+                canDIY: true,
+                tips: [
+                    'Andre strøk gir jevn, fin farge',
+                    'Fjern tape mens maling er litt fuktig',
+                    'Mal i samme retning som første strøk',
+                    'Åpne vindu for god ventilasjon',
+                    'La tørke 24 timer før du flytter inn møbler'
+                ]
+            },
+            {
+                step: 5,
+                title: 'Rydding og finish',
+                description: 'Fjern tape og plastdekke. Vask pensler og ruller. Flytt inn møbler. Nyt ditt nymalte rom!',
+                estimatedCost: Math.round(budget * 0.10),
+                estimatedTime: 1,
+                riskLevel: 'low',
+                requiresProfessional: false,
+                canDIY: true,
+                tips: [
+                    'Vask pensler og ruller grundig',
+                    'Oppbevar restmaling til utbedringer',
+                    'Vent 24 timer før du henger opp bilder',
+                    'Spar penger: Mal selv - spar 10 000-20 000 kr!',
+                    'Maling er perfekt for egeninnsats'
+                ]
+            }
+        ];
+    }
+
+    // Default for andre romtyper
     return [
         {
             step: 1,
-            title: 'Planlegging',
-            description: 'Planlegg prosjektet',
+            title: 'Planlegging og forberedelse',
+            description: 'Planlegg prosjektet i detalj. Lag tegninger, mål nøye, bestill materialer og håndverkere.',
             estimatedCost: 0,
             estimatedTime: 1,
             riskLevel: 'low',
             requiresProfessional: false,
             canDIY: true,
-            tips: ['Ta deg tid til god planlegging']
+            tips: [
+                'Ta deg tid til god planlegging',
+                'Mål nøye før du bestiller',
+                'Få flere tilbud fra håndverkere',
+                'Lag detaljert budsjett'
+            ]
+        },
+        {
+            step: 2,
+            title: 'Gjennomføring',
+            description: 'Gjennomfør prosjektet i henhold til planen. Følg med på fremdrift og budsjett.',
+            estimatedCost: Math.round(budget * 0.80),
+            estimatedTime: 2,
+            riskLevel: 'medium',
+            requiresProfessional: true,
+            canDIY: false,
+            tips: [
+                'Følg opp håndverkere regelmessig',
+                'Sjekk kvalitet underveis',
+                'Ha buffer i budsjett og tid'
+            ]
+        },
+        {
+            step: 3,
+            title: 'Sluttføring',
+            description: 'Gjennomgå arbeidet, sjekk at alt er gjort riktig. Få garantidokumenter.',
+            estimatedCost: Math.round(budget * 0.20),
+            estimatedTime: 1,
+            riskLevel: 'low',
+            requiresProfessional: false,
+            canDIY: true,
+            tips: [
+                'Lag sjekkliste for sluttbefaring',
+                'Få alle garantier skriftlig',
+                'Ta bilder av ferdig resultat'
+            ]
         }
     ];
 }
 
 function generateProductRecommendations() {
-    // Placeholder - in real app, fetch from Supabase
+    const products = getProductRecommendations();
     const productsSection = document.getElementById('productsList');
-    productsSection.innerHTML = '<p style="text-align: center; color: #64748b;">Produktanbefalinger kommer snart...</p>';
+
+    if (products.length === 0) {
+        productsSection.innerHTML = '<p style="text-align: center; color: #64748b;">Ingen produkter funnet for dette prosjektet.</p>';
+        return;
+    }
+
+    productsSection.innerHTML = products.map(product => `
+        <div class="product-card">
+            <div class="product-image-container">
+                <img src="${product.image}" alt="${product.name}" class="product-image">
+                ${product.badge ? `<span class="product-badge">${product.badge}</span>` : ''}
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">${product.name}</h3>
+                <p class="product-description">${product.description}</p>
+                <div class="product-price">
+                    <span class="price-amount">${product.price.toLocaleString('no-NO')} kr</span>
+                    ${product.originalPrice ? `<span class="price-original">${product.originalPrice.toLocaleString('no-NO')} kr</span>` : ''}
+                </div>
+                <div class="product-stores">
+                    ${product.stores.map(store => `
+                        <a href="${store.url}" target="_blank" class="store-link" rel="noopener">
+                            <span class="store-name">${store.name}</span>
+                            <span class="store-price">${store.price.toLocaleString('no-NO')} kr</span>
+                        </a>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function getProductRecommendations() {
+    // Real products from Norwegian stores
+    const productDatabase = {
+        bad: [
+            {
+                name: 'Mapei Mapegum WPS Membran',
+                description: 'Profesjonell våtromsmembran. Godkjent for norske våtrom. 10 års garanti.',
+                price: 1299,
+                image: 'https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?w=400&h=300&fit=crop',
+                badge: 'Anbefalt',
+                stores: [
+                    { name: 'Byggmax', price: 1299, url: 'https://www.byggmax.no' },
+                    { name: 'Maxbo', price: 1349, url: 'https://www.maxbo.no' },
+                    { name: 'Montér', price: 1399, url: 'https://www.monter.no' }
+                ]
+            },
+            {
+                name: 'Ifö Sign Toalett',
+                description: 'Vegghengt toalett med soft-close sete. Skandinavisk design, god kvalitet.',
+                price: 2499,
+                originalPrice: 3299,
+                image: 'https://images.unsplash.com/photo-1620626011761-996317b8d101?w=400&h=300&fit=crop',
+                badge: 'Tilbud',
+                stores: [
+                    { name: 'VVS Eksperten', price: 2499, url: 'https://www.vvseksperten.no' },
+                    { name: 'Maxbo', price: 2699, url: 'https://www.maxbo.no' },
+                    { name: 'Byggmax', price: 2799, url: 'https://www.byggmax.no' }
+                ]
+            },
+            {
+                name: 'Gustavsberg Nautic Servant 60cm',
+                description: 'Klassisk servant i porselen. 60cm bred, perfekt for små og mellomstore bad.',
+                price: 1899,
+                image: 'https://images.unsplash.com/photo-1604709177225-055f99402ea3?w=400&h=300&fit=crop',
+                stores: [
+                    { name: 'VVS Eksperten', price: 1899, url: 'https://www.vvseksperten.no' },
+                    { name: 'Maxbo', price: 1999, url: 'https://www.maxbo.no' }
+                ]
+            },
+            {
+                name: 'Porsgrunn Gulvfliser 30x30cm Matt Grå',
+                description: 'Sklisikre gulvfliser (R10). Moderne grå farge, enkel å rengjøre.',
+                price: 299,
+                image: 'https://images.unsplash.com/photo-1615971677499-5467cbab01c0?w=400&h=300&fit=crop',
+                stores: [
+                    { name: 'Flisekompaniet', price: 299, url: 'https://www.flisekompaniet.no' },
+                    { name: 'Maxbo', price: 319, url: 'https://www.maxbo.no' },
+                    { name: 'Byggmax', price: 329, url: 'https://www.byggmax.no' }
+                ]
+            },
+            {
+                name: 'IKEA GODMORGON Baderomskap 60cm',
+                description: 'Baderomskap med 2 skuffer. Hvit høyglans. Inkluderer servant og speil.',
+                price: 3495,
+                image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=400&h=300&fit=crop',
+                badge: 'Populær',
+                stores: [
+                    { name: 'IKEA', price: 3495, url: 'https://www.ikea.com/no' }
+                ]
+            }
+        ],
+        kjokken: [
+            {
+                name: 'IKEA METOD Kjøkkenskap 60cm',
+                description: 'Underskap med 2 skuffer. Hvit. Solid kvalitet, enkel montering.',
+                price: 1295,
+                image: 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?w=400&h=300&fit=crop',
+                badge: 'Anbefalt',
+                stores: [
+                    { name: 'IKEA', price: 1295, url: 'https://www.ikea.com/no' }
+                ]
+            },
+            {
+                name: 'IKEA KARLBY Benkeplate 186cm Valnøtt',
+                description: 'Laminat benkeplate. Valnøttmønster. Tåler varme og fukt.',
+                price: 1999,
+                image: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?w=400&h=300&fit=crop',
+                stores: [
+                    { name: 'IKEA', price: 1999, url: 'https://www.ikea.com/no' }
+                ]
+            },
+            {
+                name: 'Bosch Serie 4 Oppvaskmaskin',
+                description: 'Energiklasse A+++. Stille (44dB). 13 kuverter. 5 års garanti.',
+                price: 4999,
+                originalPrice: 6499,
+                image: 'https://images.unsplash.com/photo-1585659722983-3a675dabf23d?w=400&h=300&fit=crop',
+                badge: 'Tilbud',
+                stores: [
+                    { name: 'Elkjøp', price: 4999, url: 'https://www.elkjop.no' },
+                    { name: 'Power', price: 5199, url: 'https://www.power.no' },
+                    { name: 'Expert', price: 5299, url: 'https://www.expert.no' }
+                ]
+            },
+            {
+                name: 'Oras Inspera Kjøkkenkran',
+                description: 'Uttrekkbar tut. Krom. Nordisk kvalitet. 5 års garanti.',
+                price: 1899,
+                image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop',
+                stores: [
+                    { name: 'VVS Eksperten', price: 1899, url: 'https://www.vvseksperten.no' },
+                    { name: 'Maxbo', price: 1999, url: 'https://www.maxbo.no' }
+                ]
+            },
+            {
+                name: 'Subway Veggfliser 10x30cm Hvit',
+                description: 'Klassiske subway-fliser. Hvit blank. Perfekt bak benk.',
+                price: 199,
+                image: 'https://images.unsplash.com/photo-1615876234886-fd9a39fda97f?w=400&h=300&fit=crop',
+                stores: [
+                    { name: 'Flisekompaniet', price: 199, url: 'https://www.flisekompaniet.no' },
+                    { name: 'Maxbo', price: 219, url: 'https://www.maxbo.no' }
+                ]
+            }
+        ],
+        gulv: [
+            {
+                name: 'Pergo Laminatgulv Eik AC4',
+                description: 'Laminat med klikksystem. AC4 slitestyrke. 20 års garanti.',
+                price: 249,
+                image: 'https://images.unsplash.com/photo-1615971677499-5467cbab01c0?w=400&h=300&fit=crop',
+                badge: 'Anbefalt',
+                stores: [
+                    { name: 'Maxbo', price: 249, url: 'https://www.maxbo.no' },
+                    { name: 'Byggmax', price: 259, url: 'https://www.byggmax.no' },
+                    { name: 'Montér', price: 269, url: 'https://www.monter.no' }
+                ]
+            },
+            {
+                name: 'Underlagsmatte 3mm',
+                description: 'Lydreduserende underlag. Fuktsikker. Enkel å legge.',
+                price: 89,
+                image: 'https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?w=400&h=300&fit=crop',
+                stores: [
+                    { name: 'Byggmax', price: 89, url: 'https://www.byggmax.no' },
+                    { name: 'Maxbo', price: 99, url: 'https://www.maxbo.no' }
+                ]
+            }
+        ],
+        maling: [
+            {
+                name: 'Jotun Lady Supreme Finish',
+                description: 'Toppkvalitet veggmaling. Dekker godt. Lett å påføre. 10L spann.',
+                price: 899,
+                image: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=400&h=300&fit=crop',
+                badge: 'Anbefalt',
+                stores: [
+                    { name: 'Maxbo', price: 899, url: 'https://www.maxbo.no' },
+                    { name: 'Montér', price: 949, url: 'https://www.monter.no' },
+                    { name: 'Byggmax', price: 959, url: 'https://www.byggmax.no' }
+                ]
+            },
+            {
+                name: 'Malerruller Sett (3 stk)',
+                description: 'Inkluderer 3 ruller + håndtak. For vegg og tak.',
+                price: 149,
+                image: 'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400&h=300&fit=crop',
+                stores: [
+                    { name: 'Byggmax', price: 149, url: 'https://www.byggmax.no' },
+                    { name: 'Biltema', price: 159, url: 'https://www.biltema.no' }
+                ]
+            }
+        ]
+    };
+
+    return productDatabase[planData.roomType] || [];
 }
 
 function savePlan() {
