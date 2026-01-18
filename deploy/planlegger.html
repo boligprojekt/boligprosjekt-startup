@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Oppussingsplanlegger - BoligProsjekt</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="planlegger.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span class="logo-text">BoligProsjekt</span>
+                </a>
+                <div class="nav-links">
+                    <a href="planlegger.html" class="nav-link active">🎯 Smart Planlegger</a>
+                    <a href="index.html" class="nav-link">Kalkulator</a>
+                    <a href="om.html" class="nav-link">Om oss</a>
+                    <a href="login.html" class="nav-link">Logg inn</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="planner-container">
+        <div class="container">
+            <!-- Progress Bar -->
+            <div class="progress-section">
+                <div class="progress-bar">
+                    <div class="progress-step active" data-step="1"></div>
+                    <div class="progress-step" data-step="2"></div>
+                    <div class="progress-step" data-step="3"></div>
+                    <div class="progress-step" data-step="4"></div>
+                </div>
+                <p class="progress-text">Steg <span id="currentStep">1</span> av 4</p>
+            </div>
+
+            <!-- Step Content -->
+            <div class="step-card">
+                <!-- Step 1: Boliginfo -->
+                <div id="step1" class="step-content active">
+                    <h2 class="step-title">Fortell oss om boligen din</h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Boligtype</label>
+                        <div class="option-grid grid-4">
+                            <button type="button" class="option-btn" data-value="leilighet">
+                                <div class="option-icon">🏢</div>
+                                <div class="option-name">Leilighet</div>
+                            </button>
+                            <button type="button" class="option-btn" data-value="enebolig">
+                                <div class="option-icon">🏠</div>
+                                <div class="option-name">Enebolig</div>
+                            </button>
+                            <button type="button" class="option-btn" data-value="rekkehus">
+                                <div class="option-icon">🏘️</div>
+                                <div class="option-name">Rekkehus</div>
+                            </button>
+                            <button type="button" class="option-btn" data-value="hytte">
+                                <div class="option-icon">🏔️</div>
+                                <div class="option-name">Hytte</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Byggeår</label>
+                        <select id="buildYear" class="form-select">
+                            <option value="">Velg byggeår</option>
+                            <option value="<1950">Før 1950</option>
+                            <option value="1950-1980">1950-1980</option>
+                            <option value="1980-2000">1980-2000</option>
+                            <option value=">2000">Etter 2000</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Step 2: Rom -->
+                <div id="step2" class="step-content">
+                    <h2 class="step-title">Hvilket rom skal du pusse opp?</h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Velg rom</label>
+                        <div class="option-grid grid-3">
+                            <button type="button" class="option-btn" data-value="kjokken">
+                                <div class="option-icon">🍳</div>
+                                <div class="option-name">Kjøkken</div>
+                            </button>
+                            <button type="button" class="option-btn" data-value="bad">
+                                <div class="option-icon">🚿</div>
+                                <div class="option-name">Bad</div>
+                            </button>
+                            <button type="button" class="option-btn" data-value="stue">
+                                <div class="option-icon">🛋️</div>
+                                <div class="option-name">Stue</div>
+                            </button>
+                            <button type="button" class="option-btn" data-value="soverom">
+                                <div class="option-icon">🛏️</div>
+                                <div class="option-name">Soverom</div>
+                            </button>
+                            <button type="button" class="option-btn" data-value="gulv">
+                                <div class="option-icon">🪵</div>
+                                <div class="option-name">Gulv</div>
+                            </button>
+                            <button type="button" class="option-btn" data-value="maling">
+                                <div class="option-icon">🎨</div>
+                                <div class="option-name">Maling</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Størrelse (kvm)</label>
+                        <input type="number" id="roomSize" class="form-input large" placeholder="f.eks. 15">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Nåværende tilstand</label>
+                        <div class="option-grid grid-3">
+                            <button type="button" class="option-btn" data-value="good">
+                                <div class="option-name">God</div>
+                                <div class="option-desc">Trenger oppfriskning</div>
+                            </button>
+                            <button type="button" class="option-btn" data-value="medium">
+                                <div class="option-name">Middels</div>
+                                <div class="option-desc">Trenger oppussing</div>
+                            </button>
+                            <button type="button" class="option-btn" data-value="poor">
+                                <div class="option-name">Dårlig</div>
+                                <div class="option-desc">Totalrenovering</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Budsjett -->
+                <div id="step3" class="step-content">
+                    <h2 class="step-title">Hva er ditt budsjett?</h2>
+
+                    <div class="form-group">
+                        <label class="form-label">Budsjett (kr)</label>
+                        <input type="number" id="budget" class="form-input xlarge" placeholder="f.eks. 150 000">
+                    </div>
+
+                    <div class="info-box" id="budgetGuide">
+                        <p class="info-title">Veiledende priser:</p>
+                        <div class="budget-guide">
+                            <div class="budget-option">
+                                <div class="budget-label">Budsjett</div>
+                                <div class="budget-amount" id="budgetMin">-</div>
+                            </div>
+                            <div class="budget-option recommended">
+                                <div class="budget-label">Standard</div>
+                                <div class="budget-amount" id="budgetMid">-</div>
+                            </div>
+                            <div class="budget-option">
+                                <div class="budget-label">Premium</div>
+                                <div class="budget-amount" id="budgetMax">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="budgetWarning" class="warning-box" style="display: none;">
+                        <p>⚠️ <strong>Advarsel:</strong> Budsjettet ditt er lavt for dette prosjektet.</p>
+                    </div>
+                </div>
+
+                <!-- Step 4: Egeninnsats -->
+                <div id="step4" class="step-content">
+                    <h2 class="step-title">Hva kan du gjøre selv?</h2>
+
+                    <div class="form-group">
+                        <label class="form-label">Erfaring med oppussing</label>
+                        <div class="option-grid grid-3">
+                            <button type="button" class="option-btn" data-value="none">
+                                <div class="option-icon">🆕</div>
+                                <div class="option-name">Nybegynner</div>
+                                <div class="option-desc">Aldri pusset opp før</div>
+                            </button>
+                            <button type="button" class="option-btn" data-value="beginner">
+                                <div class="option-icon">🔨</div>
+                                <div class="option-name">Noe erfaring</div>
+                                <div class="option-desc">Har malt og montert</div>
+                            </button>
+                            <button type="button" class="option-btn" data-value="experienced">
+                                <div class="option-icon">⚡</div>
+                                <div class="option-name">Erfaren</div>
+                                <div class="option-desc">Kan det meste</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="info-box" id="diyTips">
+                        <h3 class="info-title">💡 Tips:</h3>
+                        <p id="diyTipsText">Velg ditt erfaringsnivå for å få personlige tips.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="step-navigation">
+                <button id="backBtn" class="btn btn-secondary" style="display: none;">← Tilbake</button>
+                <button id="nextBtn" class="btn btn-primary">Neste →</button>
+                <button id="submitBtn" class="btn btn-success" style="display: none;">Generer plan →</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="planlegger.js"></script>
+</body>
+</html>

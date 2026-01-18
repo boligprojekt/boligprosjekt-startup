@@ -1,0 +1,390 @@
+/* Prosjektplan Styles */
+
+.plan-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    padding: 3rem 0;
+}
+
+.plan-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.plan-title {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.plan-subtitle {
+    font-size: 1.125rem;
+    color: #64748b;
+}
+
+.section-title {
+    font-size: 1.875rem;
+    font-weight: bold;
+    color: #1e293b;
+    margin-bottom: 1rem;
+}
+
+.section-subtitle {
+    color: #64748b;
+    margin-bottom: 1.5rem;
+}
+
+/* Warnings */
+.warnings-section {
+    margin-bottom: 2rem;
+}
+
+.warning-card {
+    background: white;
+    border-left: 4px solid;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.warning-card.critical {
+    border-color: #dc2626;
+    background: #fef2f2;
+}
+
+.warning-card.warning {
+    border-color: #f59e0b;
+    background: #fffbeb;
+}
+
+.warning-card.info {
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.warning-title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.warning-card.critical .warning-title {
+    color: #dc2626;
+}
+
+.warning-card.warning .warning-title {
+    color: #f59e0b;
+}
+
+.warning-card.info .warning-title {
+    color: #3b82f6;
+}
+
+.warning-message {
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.warning-recommendation {
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+/* Budget Overview */
+.budget-overview {
+    background: white;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.budget-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .budget-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+.budget-card {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    text-align: center;
+}
+
+.budget-label {
+    font-size: 0.875rem;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+}
+
+.budget-amount {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1e293b;
+    margin-bottom: 0.25rem;
+}
+
+.budget-percentage {
+    font-size: 1rem;
+    color: #16a34a;
+    margin-bottom: 0.75rem;
+}
+
+.budget-explanation {
+    font-size: 0.75rem;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+/* Savings Section */
+.savings-section {
+    margin-bottom: 2rem;
+}
+
+.savings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .savings-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.savings-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.savings-card.save {
+    border-top: 4px solid #16a34a;
+}
+
+.savings-card.dont-save {
+    border-top: 4px solid #dc2626;
+}
+
+.savings-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.savings-list {
+    list-style: none;
+    padding: 0;
+}
+
+.savings-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e2e8f0;
+    color: #1e293b;
+}
+
+.savings-list li:last-child {
+    border-bottom: none;
+}
+
+/* Steps Section */
+.steps-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.steps-list {
+    margin-top: 1.5rem;
+}
+
+.step-item {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid #94a3b8;
+}
+
+.step-item.critical {
+    border-left-color: #dc2626;
+}
+
+.step-item.high {
+    border-left-color: #f59e0b;
+}
+
+.step-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 0.75rem;
+}
+
+.step-number {
+    font-size: 0.875rem;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.step-title-text {
+    font-size: 1.125rem;
+    font-weight: bold;
+    color: #1e293b;
+    flex: 1;
+    margin: 0 1rem;
+}
+
+.step-cost {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #16a34a;
+}
+
+.step-description {
+    color: #64748b;
+    margin-bottom: 0.75rem;
+}
+
+.step-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: #64748b;
+    margin-bottom: 0.75rem;
+}
+
+.step-tips {
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.step-tips-title {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.step-tips ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+/* Products Section */
+.products-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.product-card {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 2px solid #e2e8f0;
+    transition: all 0.2s ease;
+}
+
+.product-card:hover {
+    border-color: #94a3b8;
+    transform: translateY(-2px);
+}
+
+.product-card.safe-choice {
+    border-color: #16a34a;
+    background: #f0fdf4;
+}
+
+.safe-choice-badge {
+    display: inline-block;
+    background: #16a34a;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.product-name {
+    font-weight: bold;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.product-store {
+    font-size: 0.875rem;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+}
+
+.product-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #16a34a;
+    margin-bottom: 0.5rem;
+}
+
+.product-reason {
+    font-size: 0.875rem;
+    color: #64748b;
+    margin-bottom: 1rem;
+}
+
+.product-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: #1e293b;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.product-btn:hover {
+    background: #0f172a;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+@media (max-width: 768px) {
+    .action-buttons {
+        flex-direction: column;
+    }
+}
+

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Din Oppussingsplan - BoligProsjekt</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="prosjektplan.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span class="logo-text">BoligProsjekt</span>
+                </a>
+                <div class="nav-links">
+                    <a href="planlegger.html" class="nav-link">🎯 Smart Planlegger</a>
+                    <a href="index.html" class="nav-link">Kalkulator</a>
+                    <a href="prosjekter.html" class="nav-link">Mine Prosjekter</a>
+                    <a href="profil.html" class="nav-link">Profil</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="plan-container">
+        <div class="container">
+            <!-- Header -->
+            <div class="plan-header">
+                <h1 class="plan-title">Din Oppussingsplan</h1>
+                <p class="plan-subtitle" id="planSubtitle">Generert basert på dine valg</p>
+            </div>
+
+            <!-- Warnings Section -->
+            <div id="warningsSection" class="warnings-section"></div>
+
+            <!-- Budget Overview -->
+            <div class="budget-overview">
+                <h2 class="section-title">💰 Budsjettfordeling</h2>
+                <div class="budget-cards">
+                    <div class="budget-card">
+                        <div class="budget-label">Håndverkere</div>
+                        <div class="budget-amount" id="laborBudget">-</div>
+                        <div class="budget-percentage" id="laborPercentage">-</div>
+                        <p class="budget-explanation" id="laborExplanation">-</p>
+                    </div>
+                    <div class="budget-card">
+                        <div class="budget-label">Materialer</div>
+                        <div class="budget-amount" id="materialsBudget">-</div>
+                        <div class="budget-percentage" id="materialsPercentage">-</div>
+                        <p class="budget-explanation" id="materialsExplanation">-</p>
+                    </div>
+                    <div class="budget-card">
+                        <div class="budget-label">Buffer</div>
+                        <div class="budget-amount" id="bufferBudget">-</div>
+                        <div class="budget-percentage" id="bufferPercentage">-</div>
+                        <p class="budget-explanation" id="bufferExplanation">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save/Don't Save Section -->
+            <div class="savings-section">
+                <div class="savings-grid">
+                    <div class="savings-card save">
+                        <h3 class="savings-title">💰 Spar her</h3>
+                        <ul id="saveOnList" class="savings-list"></ul>
+                    </div>
+                    <div class="savings-card dont-save">
+                        <h3 class="savings-title">🚨 IKKE spar her</h3>
+                        <ul id="dontSaveOnList" class="savings-list"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Steps -->
+            <div class="steps-section">
+                <h2 class="section-title">📋 Steg-for-steg plan</h2>
+                <div id="stepsList" class="steps-list"></div>
+            </div>
+
+            <!-- Product Recommendations -->
+            <div class="products-section">
+                <h2 class="section-title">🛒 Anbefalte produkter</h2>
+                <p class="section-subtitle">Vi anbefaler 3-5 produkter per kategori basert på ditt prosjekt</p>
+                <div id="productsList" class="products-grid"></div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="window.location.href='planlegger.html'">
+                    ← Endre plan
+                </button>
+                <button class="btn btn-primary" onclick="savePlan()">
+                    💾 Lagre plan
+                </button>
+                <button class="btn btn-success" onclick="window.print()">
+                    🖨️ Skriv ut
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="prosjektplan.js"></script>
+</body>
+</html>
+
