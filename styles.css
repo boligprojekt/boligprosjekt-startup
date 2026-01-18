@@ -371,6 +371,58 @@ body {
     color: #0f172a;
 }
 
+/* Stores Section */
+.stores-section {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    padding: 3rem;
+    margin-top: 4rem;
+}
+
+.section-description {
+    text-align: center;
+    color: #64748b;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.store-card {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.store-card:hover {
+    border-color: #0f172a;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.store-name {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+}
+
+.store-desc {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
 /* Features */
 .features {
     background: white;
