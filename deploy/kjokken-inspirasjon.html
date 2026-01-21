@@ -3,45 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Kjøkken-inspirasjon | BoligProsjekt</title>
+    <title>AI Generert Inspirasjon | BoligProsjekt</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #0f172a;
             color: white;
-            padding: 60px 20px;
+            padding: 80px 20px;
             text-align: center;
         }
 
         .hero-section h1 {
-            font-size: 36px;
+            font-size: 48px;
             font-weight: 700;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
         }
 
         .hero-section p {
-            font-size: 18px;
-            opacity: 0.95;
-            max-width: 600px;
+            font-size: 20px;
+            opacity: 0.9;
+            max-width: 700px;
             margin: 0 auto;
+            line-height: 1.6;
         }
 
-        .container {
+        .main-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 60px 20px;
         }
 
         .upload-section {
             background: white;
-            border-radius: 12px;
-            padding: 32px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 32px;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #0f172a;
         }
 
         .upload-area {
-            border: 3px dashed #cbd5e1;
+            border: 2px dashed #cbd5e1;
             border-radius: 12px;
             padding: 60px 20px;
             text-align: center;
@@ -51,18 +60,25 @@
         }
 
         .upload-area:hover {
-            border-color: #667eea;
+            border-color: #0f172a;
             background: #f1f5f9;
         }
 
         .upload-area.dragover {
-            border-color: #667eea;
-            background: #eef2ff;
+            border-color: #0f172a;
+            background: #e2e8f0;
         }
 
-        .upload-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
+        .upload-area h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .upload-area p {
+            color: #64748b;
+            font-size: 14px;
         }
 
         .preview-container {
@@ -123,40 +139,73 @@
 
         .style-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
         }
 
         .style-option {
-            padding: 16px;
+            padding: 20px 16px;
             border: 2px solid #e2e8f0;
-            border-radius: 8px;
+            border-radius: 12px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            background: white;
+            font-weight: 500;
+            color: #475569;
         }
 
         .style-option:hover {
-            border-color: #667eea;
+            border-color: #0f172a;
             background: #f8fafc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         .style-option.selected {
-            border-color: #667eea;
-            background: #eef2ff;
+            border-color: #0f172a;
+            background: #0f172a;
+            color: white;
+        }
+
+        .budget-input-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-top: 12px;
         }
 
         .budget-slider {
-            width: 100%;
-            margin-top: 12px;
+            flex: 1;
+        }
+
+        .budget-manual-input {
+            width: 180px;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        .budget-manual-input:focus {
+            outline: none;
+            border-color: #0f172a;
         }
 
         .budget-labels {
             display: flex;
             justify-content: space-between;
-            margin-top: 8px;
-            font-size: 14px;
+            margin-top: 12px;
+            font-size: 13px;
             color: #64748b;
+        }
+
+        .budget-display {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-top: 12px;
         }
 
         textarea {
@@ -170,12 +219,12 @@
         }
 
         .generate-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #0f172a;
             color: white;
             border: none;
-            padding: 16px 32px;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 18px 32px;
+            border-radius: 12px;
+            font-size: 18px;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
@@ -183,13 +232,15 @@
         }
 
         .generate-btn:hover {
+            background: #1e293b;
             transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 16px rgba(15, 23, 42, 0.3);
         }
 
         .generate-btn:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
 
         .result-section {
@@ -254,86 +305,76 @@
 </head>
 <body>
     <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">BoligProsjekt</a>
-            <div class="nav-links" id="navLinks">
-                <a href="om.html" class="nav-link">Om oss</a>
-                <a href="planlegger.html" class="nav-link">Planlegger</a>
-                <a href="kjokken-inspirasjon.html" class="nav-link active">AI Inspirasjon</a>
-                <a href="login.html" class="nav-link">Logg inn</a>
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span class="logo-text">BoligProsjekt</span>
+                </a>
+                <div class="nav-links">
+                    <a href="om.html" class="nav-link">Om oss</a>
+                    <a href="kjokken-inspirasjon.html" class="nav-link" style="color: #0f172a; font-weight: 600;">AI Generert</a>
+                    <a href="login.html" class="nav-link">Logg inn</a>
+                    <a href="planlegger.html" class="btn-primary">Start planlegging →</a>
+                </div>
             </div>
         </div>
     </nav>
 
     <div class="hero-section">
-        <h1>AI Kjøkken-inspirasjon</h1>
-        <p>Last opp bilde av ditt kjøkken og få AI-generert inspirasjon tilpasset din stil og budsjett</p>
+        <h1>AI Generert Inspirasjon</h1>
+        <p>Last opp bilde og få AI-generert inspirasjon tilpasset din stil og budsjett. Se hvordan ditt nåværende kjøkken, bad, stue eller soverom kan se ut med nye fronter, farger og materialer!</p>
     </div>
 
-    <div class="container">
+    <div class="main-container">
         <!-- Upload Section -->
         <div class="upload-section">
-            <h2 style="margin-bottom: 24px;">1. Last opp bilde av ditt kjøkken</h2>
+            <h2 class="section-title">1. Last opp bilde av rommet ditt</h2>
             <div class="upload-area" id="uploadArea">
-                <div class="upload-icon">📸</div>
+                <svg width="64" height="64" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin: 0 auto 16px; color: #94a3b8;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
                 <h3>Klikk eller dra bilder hit</h3>
-                <p style="color: #64748b; margin-top: 8px;">Opptil 3 bilder (JPG, PNG)</p>
+                <p>Opptil 3 bilder (JPG, PNG, maks 10MB)</p>
                 <input type="file" id="fileInput" accept="image/*" multiple style="display: none;">
             </div>
             <div class="preview-container" id="previewContainer"></div>
         </div>
 
         <!-- Options Section -->
-        <div class="options-section">
-            <h2 style="margin-bottom: 24px;">2. Velg stil og budsjett</h2>
+        <div class="upload-section">
+            <h2 class="section-title">2. Velg stil og budsjett</h2>
 
-            <div class="option-group">
-                <label>Ønsket stil</label>
+            <div style="margin-bottom: 40px;">
+                <h3 style="margin-bottom: 16px; font-size: 18px; font-weight: 600; color: #0f172a;">Ønsket stil</h3>
                 <div class="style-grid">
-                    <div class="style-option" data-style="moderne">
-                        <div style="font-size: 32px; margin-bottom: 8px;">🏢</div>
-                        <div>Moderne</div>
-                    </div>
-                    <div class="style-option" data-style="klassisk">
-                        <div style="font-size: 32px; margin-bottom: 8px;">🏛️</div>
-                        <div>Klassisk</div>
-                    </div>
-                    <div class="style-option" data-style="skandinavisk">
-                        <div style="font-size: 32px; margin-bottom: 8px;">🌲</div>
-                        <div>Skandinavisk</div>
-                    </div>
-                    <div class="style-option" data-style="industriell">
-                        <div style="font-size: 32px; margin-bottom: 8px;">🏭</div>
-                        <div>Industriell</div>
-                    </div>
-                    <div class="style-option" data-style="landlig">
-                        <div style="font-size: 32px; margin-bottom: 8px;">🏡</div>
-                        <div>Landlig</div>
-                    </div>
-                    <div class="style-option" data-style="minimalistisk">
-                        <div style="font-size: 32px; margin-bottom: 8px;">⬜</div>
-                        <div>Minimalistisk</div>
-                    </div>
+                    <div class="style-option" data-style="moderne">Moderne</div>
+                    <div class="style-option" data-style="klassisk">Klassisk</div>
+                    <div class="style-option" data-style="skandinavisk">Skandinavisk</div>
+                    <div class="style-option" data-style="industriell">Industriell</div>
+                    <div class="style-option" data-style="landlig">Landlig</div>
+                    <div class="style-option" data-style="minimalistisk">Minimalistisk</div>
                 </div>
             </div>
 
-            <div class="option-group">
-                <label>Budsjett</label>
-                <input type="range" class="budget-slider" id="budgetSlider" min="1" max="5" value="3" step="1">
-                <div class="budget-labels">
-                    <span>Lavt<br>(50-100k)</span>
-                    <span>Middels<br>(100-200k)</span>
-                    <span>Høyt<br>(200k+)</span>
+            <div style="margin-bottom: 32px;">
+                <h3 style="margin-bottom: 16px; font-size: 18px; font-weight: 600; color: #0f172a;">Budsjett</h3>
+                <div class="budget-input-group">
+                    <input type="range" class="budget-slider" id="budgetSlider" min="50000" max="300000" step="10000" value="150000">
+                    <input type="number" class="budget-manual-input" id="budgetManual" placeholder="Skriv beløp" min="50000" max="500000" step="10000" value="150000">
                 </div>
+                <div class="budget-display" id="budgetDisplay">150 000 kr</div>
             </div>
 
-            <div class="option-group">
-                <label>Beskriv ønsket endring (valgfritt)</label>
-                <textarea id="descriptionText" rows="3" placeholder="F.eks: 'Vil ha lysere farger og mer lagringsplass'"></textarea>
+            <div style="margin-bottom: 32px;">
+                <h3 style="margin-bottom: 16px; font-size: 18px; font-weight: 600; color: #0f172a;">Beskriv ønsket endring (valgfritt)</h3>
+                <textarea id="descriptionText" rows="4" placeholder="F.eks: 'Vil ha lysere farger og mer lagringsplass'" style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-family: inherit; font-size: 16px; resize: vertical;"></textarea>
             </div>
 
             <button class="generate-btn" id="generateBtn" disabled>
-                Generer AI-inspirasjon
+                Generer AI-inspirasjon →
             </button>
         </div>
 
