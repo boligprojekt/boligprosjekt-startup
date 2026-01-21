@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Kjøkken-inspirasjon | BoligProsjekt</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .hero-section p {
+            font-size: 18px;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .upload-section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 32px;
+        }
+
+        .upload-area {
+            border: 3px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 60px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+            background: #f1f5f9;
+        }
+
+        .upload-area.dragover {
+            border-color: #667eea;
+            background: #eef2ff;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .preview-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .options-section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 32px;
+        }
+
+        .option-group {
+            margin-bottom: 24px;
+        }
+
+        .option-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #0f172a;
+        }
+
+        .style-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .style-option {
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .style-option:hover {
+            border-color: #667eea;
+            background: #f8fafc;
+        }
+
+        .style-option.selected {
+            border-color: #667eea;
+            background: #eef2ff;
+        }
+
+        .budget-slider {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .budget-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .result-section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 32px;
+            display: none;
+        }
+
+        .result-section.show {
+            display: block;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .result-image {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .result-text {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">BoligProsjekt</a>
+            <div class="nav-links" id="navLinks">
+                <a href="om.html" class="nav-link">Om oss</a>
+                <a href="planlegger.html" class="nav-link">Planlegger</a>
+                <a href="kjokken-inspirasjon.html" class="nav-link active">AI Inspirasjon</a>
+                <a href="login.html" class="nav-link">Logg inn</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <h1>AI Kjøkken-inspirasjon</h1>
+        <p>Last opp bilde av ditt kjøkken og få AI-generert inspirasjon tilpasset din stil og budsjett</p>
+    </div>
+
+    <div class="container">
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <h2 style="margin-bottom: 24px;">1. Last opp bilde av ditt kjøkken</h2>
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📸</div>
+                <h3>Klikk eller dra bilder hit</h3>
+                <p style="color: #64748b; margin-top: 8px;">Opptil 3 bilder (JPG, PNG)</p>
+                <input type="file" id="fileInput" accept="image/*" multiple style="display: none;">
+            </div>
+            <div class="preview-container" id="previewContainer"></div>
+        </div>
+
+        <!-- Options Section -->
+        <div class="options-section">
+            <h2 style="margin-bottom: 24px;">2. Velg stil og budsjett</h2>
+
+            <div class="option-group">
+                <label>Ønsket stil</label>
+                <div class="style-grid">
+                    <div class="style-option" data-style="moderne">
+                        <div style="font-size: 32px; margin-bottom: 8px;">🏢</div>
+                        <div>Moderne</div>
+                    </div>
+                    <div class="style-option" data-style="klassisk">
+                        <div style="font-size: 32px; margin-bottom: 8px;">🏛️</div>
+                        <div>Klassisk</div>
+                    </div>
+                    <div class="style-option" data-style="skandinavisk">
+                        <div style="font-size: 32px; margin-bottom: 8px;">🌲</div>
+                        <div>Skandinavisk</div>
+                    </div>
+                    <div class="style-option" data-style="industriell">
+                        <div style="font-size: 32px; margin-bottom: 8px;">🏭</div>
+                        <div>Industriell</div>
+                    </div>
+                    <div class="style-option" data-style="landlig">
+                        <div style="font-size: 32px; margin-bottom: 8px;">🏡</div>
+                        <div>Landlig</div>
+                    </div>
+                    <div class="style-option" data-style="minimalistisk">
+                        <div style="font-size: 32px; margin-bottom: 8px;">⬜</div>
+                        <div>Minimalistisk</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="option-group">
+                <label>Budsjett</label>
+                <input type="range" class="budget-slider" id="budgetSlider" min="1" max="5" value="3" step="1">
+                <div class="budget-labels">
+                    <span>Lavt<br>(50-100k)</span>
+                    <span>Middels<br>(100-200k)</span>
+                    <span>Høyt<br>(200k+)</span>
+                </div>
+            </div>
+
+            <div class="option-group">
+                <label>Beskriv ønsket endring (valgfritt)</label>
+                <textarea id="descriptionText" rows="3" placeholder="F.eks: 'Vil ha lysere farger og mer lagringsplass'"></textarea>
+            </div>
+
+            <button class="generate-btn" id="generateBtn" disabled>
+                Generer AI-inspirasjon
+            </button>
+        </div>
+
+        <!-- Result Section -->
+        <div class="result-section" id="resultSection">
+            <h2 style="margin-bottom: 24px;">Din AI-genererte inspirasjon</h2>
+            <div id="loadingIndicator" class="loading">
+                <div class="spinner"></div>
+                <p>Genererer inspirasjon...</p>
+            </div>
+            <div id="resultContent" style="display: none;">
+                <div class="result-grid">
+                    <div>
+                        <h3 style="margin-bottom: 12px;">Ditt nåværende kjøkken</h3>
+                        <img id="originalImage" class="result-image" alt="Original">
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 12px;">AI-generert inspirasjon</h3>
+                        <img id="generatedImage" class="result-image" alt="Generated">
+                    </div>
+                </div>
+                <div class="result-text" id="resultText"></div>
+                <div style="background: #fef3c7; padding: 16px; border-radius: 8px; border-left: 4px solid #f59e0b; margin-top: 16px;">
+                    <strong>Viktig:</strong> Dette er en inspirasjonsvisualisering, ikke en teknisk tegning. Endelig kjøkken må prosjekteres av leverandør.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="kjokken-inspirasjon.js"></script>
+</body>
+</html>
+
