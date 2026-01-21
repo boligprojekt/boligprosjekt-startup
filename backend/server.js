@@ -145,6 +145,42 @@ app.post('/api/analyze-stream', upload.single('image'), async (req, res) => {
   }
 });
 
+// Chat med Claude (streaming)
+app.post('/api/chat-stream', async (req, res) => {
+  try {
+    const { messages, context } = req.body;
+
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({ error: 'Messages mangler' });
+    }
+
+    console.log('💬 Chat request mottatt');
+    console.log(`   Meldinger: ${messages.length}`);
+    console.log(`   Context: ${context || 'none'}`);
+
+    // Sett opp Server-Sent Events
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    // Import chat service
+    const { streamChat } = await import('./services/chat.js');
+
+    // Stream chat fra Claude
+    await streamChat(messages, { context }, (chunk) => {
+      res.write(`data: ${JSON.stringify(chunk)}\n\n`);
+    });
+
+    res.write('data: [DONE]\n\n');
+    res.end();
+
+  } catch (error) {
+    console.error('❌ Feil ved chat:', error);
+    res.write(`data: ${JSON.stringify({ error: error.message })}\n\n`);
+    res.end();
+  }
+});
+
 // Generer bilde med DALL-E
 app.post('/api/generate-image', async (req, res) => {
   try {
@@ -199,6 +235,10 @@ app.listen(PORT, () => {
   console.log(`   GET  /health`);
   console.log(`   POST /api/analyze`);
   console.log(`   POST /api/analyze-stream`);
+  console.log(`   POST /api/chat-stream`);
   console.log(`   POST /api/generate-image`);
+  console.log('');
+  console.log('🌐 Frontend URLs:');
+  console.log(`   Chat: http://localhost:${PORT === 3001 ? '8080' : '3000'}/ai-chat.html`);
 });
 
