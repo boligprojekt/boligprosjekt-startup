@@ -1,0 +1,14 @@
+{
+  "name": "boligprosjekt-sandbox",
+  "version": "1.0.0",
+  "description": "AI Sandbox for image processing",
+  "main": "runner.js",
+  "type": "module",
+  "scripts": {
+    "start": "node runner.js"
+  },
+  "dependencies": {
+    "sharp": "^0.33.2"
+  }
+}
+
