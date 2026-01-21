@@ -267,69 +267,188 @@ RESULTAT: Et fotorealistisk bilde av samme rom, men med ny stil og materialer so
 async function callOpenAI(imageFile, prompt) {
     // Check if API key exists
     if (!window.OPENAI_API_KEY || window.OPENAI_API_KEY === '') {
-        console.log('Ingen API-nøkkel funnet - kjører i demo-modus');
+        console.log('⚠️ Ingen API-nøkkel funnet - kjører i demo-modus');
+        console.log('For ekte AI-generering: Sett OPENAI_API_KEY i config.js');
         return generateDemoResult();
     }
 
     try {
-        // DALL-E 3 støtter ikke image edits, kun generations
-        // Vi må derfor beskrive rommet i prompten i stedet for å sende bildet
+        console.log('🚀 Starter ekte AI-generering med 2-stegs prosess:');
+        console.log('   Steg 1: GPT-4 Vision analyserer bildet');
+        console.log('   Steg 2: DALL-E 3 genererer nytt bilde');
 
-        const enhancedPrompt = `Lag et fotorealistisk interiørbilde av et rom i en norsk bolig. ${prompt}
+        // STEG 1: Analyser bildet med GPT-4 Vision
+        console.log('📸 Konverterer bilde til base64...');
+        const base64Image = await fileToBase64(imageFile);
 
-Viktig: Bildet skal se ut som et ekte foto tatt med et profesjonelt kamera, ikke en 3D-rendering.`;
+        console.log('🔍 Sender bilde til GPT-4 Vision for analyse...');
+        const imageAnalysis = await analyzeImageWithGPT4Vision(base64Image, selectedStyle, selectedBudget);
 
-        // Call OpenAI DALL-E 3 API
-        const response = await fetch('https://api.openai.com/v1/images/generations', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${window.OPENAI_API_KEY}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                model: 'dall-e-3',
-                prompt: enhancedPrompt,
-                n: 1,
-                size: '1024x1024',
-                quality: 'standard'
-            })
-        });
+        console.log('✅ Bildeanalyse mottatt:', imageAnalysis.substring(0, 200) + '...');
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error('OpenAI API Error:', errorData);
-            throw new Error(`API request failed: ${errorData.error?.message || 'Unknown error'}`);
-        }
+        // STEG 2: Generer nytt bilde med DALL-E 3 basert på analysen
+        console.log('🎨 Genererer nytt bilde med DALL-E 3...');
+        const generatedImageUrl = await generateImageWithDALLE3(imageAnalysis, prompt);
 
-        const data = await response.json();
+        console.log('✅ Bilde generert!', generatedImageUrl);
 
         return {
-            imageUrl: data.data[0].url,
-            explanation: generateExplanation(selectedStyle, selectedBudget)
+            imageUrl: generatedImageUrl,
+            explanation: generateExplanation(selectedStyle, selectedBudget),
+            analysis: imageAnalysis // For debugging
         };
 
     } catch (error) {
-        console.error('OpenAI API Error:', error);
-        alert(`AI-generering feilet: ${error.message}. Viser demo-resultat i stedet.`);
-        // Fallback to demo mode
+        console.error('❌ OpenAI API Error:', error);
+        alert(`AI-generering feilet: ${error.message}\n\nViser demo-resultat i stedet.`);
         return generateDemoResult();
     }
+}
+
+// ============================================
+// STEG 1: ANALYSER BILDE MED GPT-4 VISION
+// ============================================
+async function analyzeImageWithGPT4Vision(base64Image, style, budget) {
+    const analysisPrompt = `Du er en ekspert på interiørdesign og romanalyse.
+
+Analyser dette bildet nøye og beskriv:
+
+1. **Romtype**: Er dette et kjøkken, bad, soverom, stue, eller annet?
+2. **Nåværende stil**: Hvilken stil har rommet nå? (moderne, klassisk, skandinavisk, etc.)
+3. **Fargepalett**: Hvilke farger dominerer?
+4. **Lysforhold**: Naturlig lys, kunstig lys, lyse/mørke toner?
+5. **Romstørrelse**: Lite, middels, stort rom?
+6. **Arkitektoniske detaljer**: Vinduer, dører, takehøyde, vegger
+7. **Møbler/innredning**: Hva finnes i rommet?
+8. **Materialer**: Tre, metall, stein, tekstiler?
+9. **Layout**: Hvordan er rommet organisert?
+10. **Tilstand**: Nytt, slitt, trenger oppussing?
+
+Vær EKSTREMT detaljert og presis. Dette brukes til å generere et nytt bilde.`;
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${window.OPENAI_API_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            model: 'gpt-4o', // GPT-4 Omni (multimodal)
+            messages: [
+                {
+                    role: 'user',
+                    content: [
+                        {
+                            type: 'text',
+                            text: analysisPrompt
+                        },
+                        {
+                            type: 'image_url',
+                            image_url: {
+                                url: `data:image/jpeg;base64,${base64Image}`,
+                                detail: 'high' // High detail for better analysis
+                            }
+                        }
+                    ]
+                }
+            ],
+            max_tokens: 1000,
+            temperature: 0.3 // Lower temperature for more accurate analysis
+        })
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        console.error('GPT-4 Vision API Error:', errorData);
+        throw new Error(`GPT-4 Vision feilet: ${errorData.error?.message || 'Unknown error'}`);
+    }
+
+    const data = await response.json();
+    console.log('📊 GPT-4 Vision API Response:', data);
+
+    return data.choices[0].message.content;
+}
+
+// ============================================
+// STEG 2: GENERER BILDE MED DALL-E 3
+// ============================================
+async function generateImageWithDALLE3(imageAnalysis, stylePrompt) {
+    const dallePrompt = `Basert på denne romanalysen, lag et fotorealistisk bilde av samme rom, men med ny stil og materialer:
+
+ROMANALYSE:
+${imageAnalysis}
+
+ØNSKET ENDRING:
+${stylePrompt}
+
+VIKTIGE KRAV:
+1. BEHOLD eksakt samme romstørrelse, vinduer, dører og arkitektur
+2. BEHOLD samme layout og romorganisering
+3. ENDRE kun: farger, materialer, møbler, stil, overflater
+4. Lag et FOTOREALISTISK bilde (ikke 3D-rendering)
+5. Bildet skal se ut som et profesjonelt interiørfoto
+6. Bruk norske standarder og produkter
+7. Tilpass materialvalg til budsjett
+
+RESULTAT: Et fotorealistisk interiørbilde av samme rom med ny stil.`;
+
+    console.log('📝 DALL-E 3 Prompt:', dallePrompt.substring(0, 300) + '...');
+
+    const response = await fetch('https://api.openai.com/v1/images/generations', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${window.OPENAI_API_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            model: 'dall-e-3',
+            prompt: dallePrompt,
+            n: 1,
+            size: '1024x1024',
+            quality: 'hd', // HD quality for better results
+            style: 'natural' // Natural photographic style
+        })
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        console.error('DALL-E 3 API Error:', errorData);
+        throw new Error(`DALL-E 3 feilet: ${errorData.error?.message || 'Unknown error'}`);
+    }
+
+    const data = await response.json();
+    console.log('🎨 DALL-E 3 API Response:', data);
+
+    return data.data[0].url;
 }
 
 function fileToBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = reject;
+        reader.onload = () => {
+            const base64 = reader.result.split(',')[1];
+            console.log(`✅ Bilde konvertert til base64 (${(base64.length / 1024).toFixed(2)} KB)`);
+            resolve(base64);
+        };
+        reader.onerror = (error) => {
+            console.error('❌ Feil ved konvertering til base64:', error);
+            reject(error);
+        };
         reader.readAsDataURL(file);
     });
 }
 
 function generateDemoResult() {
-    // Demo mode - return placeholder
+    console.log('⚠️ DEMO-MODUS: Viser statisk bilde fra Unsplash');
+    console.log('💡 For ekte AI-generering:');
+    console.log('   1. Opprett config.js i deploy/ mappen');
+    console.log('   2. Legg til: window.OPENAI_API_KEY = "sk-...";');
+    console.log('   3. Få API-nøkkel fra https://platform.openai.com/');
+
     return {
         imageUrl: 'https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?w=1024&h=1024&fit=crop',
-        explanation: generateExplanation(selectedStyle, selectedBudget)
+        explanation: generateExplanation(selectedStyle, selectedBudget),
+        isDemo: true
     };
 }
 
@@ -415,5 +534,22 @@ function displayResult(result) {
     reader.readAsDataURL(uploadedImages[0]);
 
     generatedImage.src = result.imageUrl;
-    resultText.innerHTML = result.explanation;
+
+    // Add demo warning if in demo mode
+    let explanationHTML = result.explanation;
+    if (result.isDemo) {
+        explanationHTML = `
+            <div style="background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+                <h4 style="color: #92400e; margin: 0 0 8px 0; font-size: 16px;">⚠️ Demo-modus</h4>
+                <p style="color: #78350f; margin: 0; font-size: 14px;">
+                    Dette er et statisk demo-bilde. For ekte AI-generering basert på ditt opplastede bilde,
+                    må du sette opp OpenAI API-nøkkel i config.js.
+                </p>
+            </div>
+        ` + explanationHTML;
+    }
+
+    resultText.innerHTML = explanationHTML;
+
+    console.log('✅ Resultat vist til bruker');
 }

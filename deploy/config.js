@@ -6,11 +6,31 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const GROK_API_KEY = 'xai-YOUR_API_KEY_HERE'; // Må settes av bruker
 const GROK_API_URL = 'https://api.x.ai/v1/chat/completions';
 
-// OpenAI konfigurasjon (for AI Kjøkken-inspirasjon)
+// ============================================
+// OpenAI konfigurasjon (for AI Generert Inspirasjon)
+// ============================================
 // VIKTIG: Denne nøkkelen må holdes hemmelig!
 // I produksjon bør API-kall gå via backend for å skjule nøkkelen
-const OPENAI_API_KEY = ''; // Sett din OpenAI API-nøkkel her (eller la stå tom for demo-modus)
+
+// For å aktivere EKTE AI-generering:
+// 1. Gå til https://platform.openai.com/api-keys
+// 2. Opprett en ny API-nøkkel
+// 3. Lim inn nøkkelen under (erstatt tom streng)
+// 4. Deploy til Netlify
+
+// Hvis tom, kjører systemet i demo-modus med statisk bilde
+const OPENAI_API_KEY = ''; // Sett din OpenAI API-nøkkel her: 'sk-proj-...'
 window.OPENAI_API_KEY = OPENAI_API_KEY;
+
+// Logging
+if (OPENAI_API_KEY && OPENAI_API_KEY !== '') {
+    console.log('✅ OpenAI API-nøkkel funnet - EKTE AI-generering aktivert');
+    console.log('   Modeller: GPT-4o (Vision) + DALL-E 3 (HD)');
+    console.log('   Kostnad: ~0.90 kr per generering');
+} else {
+    console.log('⚠️ Ingen OpenAI API-nøkkel - Kjører i DEMO-modus');
+    console.log('   For ekte AI: Sett OPENAI_API_KEY i config.js');
+}
 
 // Vent på at Supabase er lastet, deretter initialiser client
 (function initSupabase() {
