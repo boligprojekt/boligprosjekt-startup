@@ -21,11 +21,20 @@ function loadPlanData() {
 }
 
 function generatePlan() {
+    // Generer plan med ny engine
+    const detailedPlan = genererProsjektplan(planData);
+
+    // Lagre detaljert plan
+    window.detailedPlan = detailedPlan;
+
+    // Oppdater UI
     updateHeader();
+    generateSmartVurdering(detailedPlan);
     generateWarnings();
+    generateDenneUken(detailedPlan);
     generateBudgetOverview();
     generateSavingsRecommendations();
-    generateSteps();
+    generateDetailedSteps(detailedPlan);
     generateProductRecommendations();
 }
 
@@ -38,10 +47,116 @@ function updateHeader() {
         stue: 'Stue',
         soverom: 'Soverom'
     };
-    
+
     const roomName = roomNames[planData.roomType] || planData.roomType;
     const subtitle = `${roomName} • ${planData.budget.toLocaleString('no-NO')} kr • ${planData.diyLevel}`;
     document.getElementById('planSubtitle').textContent = subtitle;
+}
+
+function generateSmartVurdering(plan) {
+    const section = document.getElementById('smartVurdering');
+
+    const risikoFarge = {
+        'lav': '#10b981',
+        'middels': '#f59e0b',
+        'høy': '#ef4444',
+        'kritisk': '#dc2626'
+    };
+
+    const html = `
+        <div style="background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 16px; color: #0f172a;">
+                Smart Vurdering
+            </h2>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                <div style="padding: 12px; background: #f8fafc; border-radius: 8px;">
+                    <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">Risiko</div>
+                    <div style="font-size: 18px; font-weight: 600; color: ${risikoFarge[plan.vurdering.totalRisiko]};">
+                        ${plan.vurdering.totalRisiko.toUpperCase()}
+                    </div>
+                </div>
+                <div style="padding: 12px; background: #f8fafc; border-radius: 8px;">
+                    <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">Varighet</div>
+                    <div style="font-size: 18px; font-weight: 600; color: #0f172a;">
+                        ${plan.vurdering.estimertVarighet}
+                    </div>
+                </div>
+                <div style="padding: 12px; background: #f8fafc; border-radius: 8px;">
+                    <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">Arbeidstimer</div>
+                    <div style="font-size: 18px; font-weight: 600; color: #0f172a;">
+                        ${plan.vurdering.estimertArbeidstimer}
+                    </div>
+                </div>
+                <div style="padding: 12px; background: #f8fafc; border-radius: 8px;">
+                    <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">For nybegynner?</div>
+                    <div style="font-size: 18px; font-weight: 600; color: #0f172a;">
+                        ${plan.vurdering.egnetForNybegynner === 'ja' ? '✓ Ja' : plan.vurdering.egnetForNybegynner === 'delvis' ? '⚠️ Delvis' : '✗ Nei'}
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 16px;">
+                <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #0f172a;">Anbefalinger:</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    ${plan.vurdering.anbefalinger.map(anbefaling => `
+                        <li style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 14px;">
+                            ${anbefaling}
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+        </div>
+    `;
+
+    section.innerHTML = html;
+}
+
+function generateDenneUken(plan) {
+    const section = document.getElementById('denneUkenSection');
+
+    if (!plan.denneUken || plan.denneUken.length === 0) {
+        section.style.display = 'none';
+        return;
+    }
+
+    const html = `
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 24px; margin-bottom: 24px; color: white;">
+            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">
+                Hva skal du gjøre denne uken?
+            </h2>
+            <p style="opacity: 0.9; margin-bottom: 20px; font-size: 14px;">
+                Start med disse oppgavene for å komme i gang
+            </p>
+
+            <div style="display: grid; gap: 12px;">
+                ${plan.denneUken.map((oppgave, index) => `
+                    <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 8px; padding: 16px; border: 1px solid rgba(255,255,255,0.2);">
+                        <div style="display: flex; align-items: start; gap: 12px;">
+                            <div style="background: rgba(255,255,255,0.25); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">
+                                ${index + 1}
+                            </div>
+                            <div style="flex: 1;">
+                                <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">
+                                    ${oppgave.oppgave}
+                                </h3>
+                                <p style="opacity: 0.9; font-size: 14px; margin-bottom: 8px;">
+                                    ${oppgave.detaljer}
+                                </p>
+                                <div style="display: flex; gap: 16px; font-size: 13px; opacity: 0.85;">
+                                    ${oppgave.hvor ? `<span>📍 ${oppgave.hvor}</span>` : ''}
+                                    <span>⏱️ ${oppgave.tid}</span>
+                                    <span>💰 ${oppgave.kostnad.toLocaleString('no-NO')} kr</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+
+    section.innerHTML = html;
 }
 
 function generateWarnings() {
@@ -261,6 +376,116 @@ function getSavingsRecommendations() {
     };
 
     return recommendations[planData.roomType] || { saveOn: [], dontSaveOn: [] };
+}
+
+function generateDetailedSteps(plan) {
+    const stepsList = document.getElementById('stepsList');
+
+    if (!plan.faser || plan.faser.length === 0) {
+        // Fallback til gamle steps
+        generateSteps();
+        return;
+    }
+
+    const risikoFarge = {
+        'lav': '#10b981',
+        'middels': '#f59e0b',
+        'høy': '#ef4444',
+        'kritisk': '#dc2626'
+    };
+
+    stepsList.innerHTML = plan.faser.map((fase, index) => `
+        <div class="step-item" style="border-left: 4px solid ${risikoFarge[fase.risiko]}; margin-bottom: 20px;">
+            <div class="step-header" style="cursor: pointer;" onclick="toggleFase(${index})">
+                <div class="step-number">Fase ${fase.fase}</div>
+                <div class="step-title-text">${fase.navn}</div>
+                <div class="step-cost">${fase.kostnad.toLocaleString('no-NO')} kr</div>
+            </div>
+
+            <div class="step-meta" style="margin-top: 8px;">
+                <span>⏱️ ${fase.varighet_timer[0]}-${fase.varighet_timer[1]} timer</span>
+                <span>📅 ${fase.uke}</span>
+                <span>${fase.hvemGjør === 'selv' ? '✓ Kan gjøres selv' : fase.hvemGjør === 'fagperson' ? '⚠️ Krever fagperson' : '⚠️ Selv eller fagperson'}</span>
+                <span class="risk-badge" style="background: ${risikoFarge[fase.risiko]}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                    ${fase.risiko.toUpperCase()}
+                </span>
+            </div>
+
+            <div id="fase-${index}" style="display: none; margin-top: 16px;">
+                ${fase.lovpålagt ? `
+                    <div style="background: #fee2e2; border-left: 4px solid #dc2626; padding: 12px; margin-bottom: 16px; border-radius: 4px;">
+                        <div style="font-weight: 600; color: #dc2626; margin-bottom: 4px;">⚠️ LOVPÅLAGT FAGARBEID</div>
+                        <div style="font-size: 14px; color: #991b1b;">${fase.lovpålagt}</div>
+                    </div>
+                ` : ''}
+
+                ${fase.advarsel ? `
+                    <div style="background: ${fase.advarsel.type === 'kritisk' ? '#fee2e2' : '#fef3c7'}; border-left: 4px solid ${fase.advarsel.type === 'kritisk' ? '#dc2626' : '#f59e0b'}; padding: 12px; margin-bottom: 16px; border-radius: 4px;">
+                        <div style="font-weight: 600; color: ${fase.advarsel.type === 'kritisk' ? '#dc2626' : '#d97706'}; margin-bottom: 4px;">
+                            ${fase.advarsel.type === 'kritisk' ? '🚨 KRITISK' : '⚠️ ADVARSEL'}
+                        </div>
+                        <div style="font-size: 14px; color: #0f172a; margin-bottom: 4px;">${fase.advarsel.melding}</div>
+                        <div style="font-size: 13px; color: #64748b;">${fase.advarsel.konsekvens}</div>
+                    </div>
+                ` : ''}
+
+                <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; color: #0f172a;">Oppgaver:</h4>
+                <div style="display: grid; gap: 12px; margin-bottom: 16px;">
+                    ${fase.oppgaver.map(oppgave => `
+                        <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <div style="font-weight: 600; color: #0f172a; margin-bottom: 4px;">${oppgave.oppgave}</div>
+                            <div style="font-size: 14px; color: #475569; margin-bottom: 8px;">${oppgave.detaljer}</div>
+
+                            <div style="display: flex; gap: 12px; flex-wrap: wrap; font-size: 13px; color: #64748b; margin-bottom: 8px;">
+                                ${oppgave.tid_timer ? `<span>⏱️ ${oppgave.tid_timer[0]}-${oppgave.tid_timer[1]} timer</span>` : ''}
+                                ${oppgave.kostnad ? `<span>💰 ${oppgave.kostnad.toLocaleString('no-NO')} kr</span>` : ''}
+                            </div>
+
+                            ${oppgave.produkter ? `<div style="font-size: 13px; color: #475569; margin-bottom: 4px;"><strong>Produkter:</strong> ${oppgave.produkter}</div>` : ''}
+                            ${oppgave.verktøy ? `<div style="font-size: 13px; color: #475569; margin-bottom: 4px;"><strong>Verktøy:</strong> ${oppgave.verktøy}</div>` : ''}
+                            ${oppgave.sikkerhet ? `<div style="font-size: 13px; color: #dc2626; margin-bottom: 4px;"><strong>⚠️ Sikkerhet:</strong> ${oppgave.sikkerhet}</div>` : ''}
+                            ${oppgave.tips ? `<div style="font-size: 13px; color: #10b981; margin-bottom: 4px;"><strong>💡 Tips:</strong> ${oppgave.tips}</div>` : ''}
+                            ${oppgave.vanligeFeil ? `<div style="font-size: 13px; color: #f59e0b;"><strong>⚠️ Vanlige feil:</strong> ${oppgave.vanligeFeil}</div>` : ''}
+                            ${oppgave.hvor ? `<div style="font-size: 13px; color: #6366f1; margin-top: 4px;"><strong>📍 Hvor:</strong> ${oppgave.hvor}</div>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+
+                ${fase.sjekkliste && fase.sjekkliste.length > 0 ? `
+                    <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; color: #0f172a;">Sjekkliste:</h4>
+                    <div style="background: #f0fdf4; padding: 12px; border-radius: 8px; border: 1px solid #bbf7d0;">
+                        ${fase.sjekkliste.map((item, itemIndex) => `
+                            <label style="display: flex; align-items: center; padding: 6px 0; cursor: pointer;">
+                                <input type="checkbox" id="check-${index}-${itemIndex}" style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
+                                <span style="font-size: 14px; color: #0f172a;">${item}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                ` : ''}
+
+                ${fase.alternativ ? `
+                    <div style="background: #eff6ff; padding: 12px; border-radius: 8px; border: 1px solid #bfdbfe; margin-top: 12px;">
+                        <div style="font-weight: 600; color: #1e40af; margin-bottom: 4px;">💡 Alternativ: ${fase.alternativ.navn}</div>
+                        <div style="font-size: 14px; color: #475569; margin-bottom: 4px;">Ekstra kostnad: ${fase.alternativ.kostnad_ekstra.toLocaleString('no-NO')} kr</div>
+                        <div style="font-size: 13px; color: #64748b;">
+                            <strong>Fordeler:</strong> ${fase.alternativ.fordeler}<br>
+                            <strong>Ulemper:</strong> ${fase.alternativ.ulemper}<br>
+                            <strong>Anbefaling:</strong> ${fase.alternativ.anbefaling}
+                        </div>
+                    </div>
+                ` : ''}
+            </div>
+        </div>
+    `).join('');
+}
+
+function toggleFase(index) {
+    const element = document.getElementById(`fase-${index}`);
+    if (element.style.display === 'none') {
+        element.style.display = 'block';
+    } else {
+        element.style.display = 'none';
+    }
 }
 
 function generateSteps() {
