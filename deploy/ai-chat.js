@@ -4,8 +4,12 @@
 // Venstre: Chat med Claude
 // Høyre: Live preview av rom-visualisering
 
-// Backend URL
-const BACKEND_URL = window.AI_BACKEND_URL || 'http://localhost:3001';
+// Backend URL - hent fra config.js (lastet før dette scriptet)
+const BACKEND_URL = window.AI_BACKEND_URL || '';
+
+console.log('🔧 AI Chat initialisert');
+console.log(`   Hostname: ${window.location.hostname}`);
+console.log(`   Backend URL: ${BACKEND_URL || 'IKKE SATT (demo-modus)'}`);
 
 // DOM elements
 const messagesContainer = document.getElementById('messages');
@@ -17,9 +21,6 @@ const previewStatus = document.getElementById('previewStatus');
 // Chat history
 let chatHistory = [];
 let currentRoomDescription = '';
-
-console.log('🚀 AI Chat initialisert');
-console.log(`   Backend: ${BACKEND_URL}`);
 
 // ============================================
 // EVENT LISTENERS
