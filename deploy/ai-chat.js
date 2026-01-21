@@ -329,8 +329,36 @@ High quality, 4K, professional interior photography.`;
 // ============================================
 
 async function checkBackendHealth() {
+    // Hvis ingen backend URL er satt, kjør i demo-modus
+    if (!BACKEND_URL || BACKEND_URL === '') {
+        console.log('⚠️ Ingen backend konfigurert - Kjører i DEMO-modus');
+        addMessage('assistant', `
+            ⚠️ <strong>Demo-modus</strong><br><br>
+            Backend er ikke konfigurert ennå. For å aktivere ekte AI-chat:<br><br>
+            1. Deploy backend til Render.com eller Railway.app<br>
+            2. Sett <code>window.AI_BACKEND_URL</code> i config.js<br>
+            3. Legg til Claude API-nøkkel og OpenAI API-nøkkel<br><br>
+            <em>Se QUICK_START_AI_BACKEND.md for instruksjoner.</em>
+        `);
+
+        // Disable input
+        userInput.disabled = true;
+        sendBtn.disabled = true;
+        userInput.placeholder = 'Backend ikke konfigurert - se instruksjoner over';
+
+        return false;
+    }
+
     try {
-        const response = await fetch(`${BACKEND_URL}/health`);
+        const response = await fetch(`${BACKEND_URL}/health`, {
+            method: 'GET',
+            mode: 'cors',
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
         const data = await response.json();
 
         console.log('✅ Backend tilgjengelig');
@@ -340,10 +368,24 @@ async function checkBackendHealth() {
         return true;
     } catch (error) {
         console.error('❌ Backend ikke tilgjengelig:', error);
-        console.error('   Sjekk at backend kjører på:', BACKEND_URL);
+        console.error('   URL:', BACKEND_URL);
 
         // Show error in chat
-        addMessage('assistant', `❌ Kunne ikke koble til backend på ${BACKEND_URL}. Sjekk at serveren kjører.`);
+        addMessage('assistant', `
+            ❌ <strong>Kunne ikke koble til backend</strong><br><br>
+            Backend URL: <code>${BACKEND_URL}</code><br><br>
+            Mulige årsaker:<br>
+            • Backend kjører ikke<br>
+            • Feil URL i config.js<br>
+            • CORS-problemer<br>
+            • Nettverksfeil<br><br>
+            <em>Sjekk konsollen for mer info.</em>
+        `);
+
+        // Disable input
+        userInput.disabled = true;
+        sendBtn.disabled = true;
+        userInput.placeholder = 'Kan ikke koble til backend - se feilmelding over';
 
         return false;
     }

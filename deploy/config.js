@@ -32,6 +32,21 @@ if (OPENAI_API_KEY && OPENAI_API_KEY !== '') {
     console.log('   For ekte AI: Sett OPENAI_API_KEY i config.js');
 }
 
+// ============================================
+// AI Backend konfigurasjon
+// ============================================
+// Backend URL - automatisk deteksjon av miljø
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    // Lokal utvikling
+    window.AI_BACKEND_URL = 'http://localhost:3001';
+} else {
+    // Produksjon - sett til din deployed backend URL
+    // Eksempel: 'https://boligprosjekt-ai.onrender.com'
+    window.AI_BACKEND_URL = ''; // TOM = Demo-modus (ingen backend)
+}
+
+console.log('🔧 AI Backend URL:', window.AI_BACKEND_URL || 'DEMO-MODUS (ingen backend)');
+
 // Vent på at Supabase er lastet, deretter initialiser client
 (function initSupabase() {
     if (typeof window.supabase !== 'undefined') {
