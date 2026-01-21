@@ -70,8 +70,14 @@ async function sendMessage() {
     });
 
     try {
-        // Send to Claude via backend
-        await streamChatResponse(message);
+        // Check if backend is available
+        if (!BACKEND_URL || BACKEND_URL === '') {
+            // DEMO MODE: Simulate AI response
+            await simulateDemoResponse(message);
+        } else {
+            // REAL MODE: Send to Claude via backend
+            await streamChatResponse(message);
+        }
 
     } catch (error) {
         console.error('❌ Feil ved sending:', error);
@@ -85,7 +91,106 @@ async function sendMessage() {
 }
 
 // ============================================
-// STREAM CHAT RESPONSE
+// SIMULATE DEMO RESPONSE (når backend ikke er tilgjengelig)
+// ============================================
+
+async function simulateDemoResponse(userMessage) {
+    console.log('🎭 Simulerer AI-respons (demo-modus)');
+
+    // Create assistant message placeholder
+    const messageDiv = addMessage('assistant', '');
+    const contentDiv = messageDiv.querySelector('.message-content');
+
+    // Simulate typing delay
+    await sleep(500);
+
+    // Generate demo response based on user message
+    const demoResponse = generateDemoResponse(userMessage);
+
+    // Simulate streaming by showing text character by character
+    let currentText = '';
+    for (let i = 0; i < demoResponse.length; i++) {
+        currentText += demoResponse[i];
+        contentDiv.innerHTML = formatMessage(currentText);
+        scrollToBottom();
+
+        // Random delay between 20-50ms per character
+        await sleep(Math.random() * 30 + 20);
+    }
+
+    // Add to history
+    chatHistory.push({
+        role: 'assistant',
+        content: demoResponse
+    });
+
+    console.log('✅ Demo-respons fullført');
+}
+
+function generateDemoResponse(userMessage) {
+    const lowerMessage = userMessage.toLowerCase();
+
+    // Detect room type
+    if (lowerMessage.includes('kjøkken')) {
+        return `Flott at du vil oppgradere kjøkkenet! 🏠
+
+For å gi deg best mulig råd, trenger jeg litt mer informasjon:
+
+• **Størrelse:** Hvor mange kvadratmeter er kjøkkenet?
+• **Stil:** Hvilken stil ønsker du? (moderne, klassisk, skandinavisk)
+• **Budsjett:** Hva er ditt budsjett for oppussingen?
+• **Tilstand:** Hvordan ser kjøkkenet ut i dag?
+
+*Merk: Dette er en simulert respons. For ekte AI-analyse med Claude Opus, må backend deployes.*`;
+    }
+
+    if (lowerMessage.includes('bad') || lowerMessage.includes('baderom')) {
+        return `Baderom er et viktig rom å få riktig! 🛁
+
+La meg stille noen spørsmål:
+
+• **Størrelse:** Hvor stort er badet?
+• **Våtrom:** Er det flislagt våtrom eller behov for oppgradering?
+• **Stil:** Moderne, klassisk eller noe annet?
+• **Budsjett:** Hva har du tenkt å bruke?
+
+*Merk: Dette er en simulert respons. For ekte AI-analyse, deploy backend.*`;
+    }
+
+    if (lowerMessage.includes('soverom') || lowerMessage.includes('stue')) {
+        return `Interessant! La meg hjelpe deg med planleggingen. 🎨
+
+Fortell meg mer:
+
+• **Romtype:** Soverom eller stue?
+• **Størrelse:** Antall kvadratmeter?
+• **Fargepreferanser:** Lyse eller mørke farger?
+• **Budsjett:** Hva er rammen?
+
+*Merk: Dette er en simulert respons. For ekte AI-chat med Claude Opus, må backend konfigureres.*`;
+    }
+
+    // Generic response
+    return `Takk for meldingen! 👋
+
+Jeg er en simulert AI-assistent (demo-modus).
+
+For å få **ekte AI-analyse** med Claude Opus og DALL-E 3:
+1. Deploy backend til Render.com
+2. Konfigurer API-nøkler
+3. Oppdater config.js
+
+Prøv å beskrive et rom du vil oppgradere (kjøkken, bad, soverom, stue), så viser jeg deg hvordan chat-interfacet fungerer!
+
+*Merk: Dette er kun en demo. Svarene er forhåndsdefinert, ikke generert av AI.*`;
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// ============================================
+// STREAM CHAT RESPONSE (ekte backend)
 // ============================================
 
 async function streamChatResponse(userMessage) {
@@ -332,22 +437,26 @@ High quality, 4K, professional interior photography.`;
 async function checkBackendHealth() {
     // Hvis ingen backend URL er satt, kjør i demo-modus
     if (!BACKEND_URL || BACKEND_URL === '') {
-        console.log('⚠️ Ingen backend konfigurert - Kjører i DEMO-modus');
+        console.log('⚠️ Ingen backend konfigurert - Kjører i LOKAL DEMO-modus');
+        console.log('   Du kan teste chat-interfacet med simulerte svar!');
+
         addMessage('assistant', `
-            ⚠️ <strong>Demo-modus</strong><br><br>
-            Backend er ikke konfigurert ennå. For å aktivere ekte AI-chat:<br><br>
-            1. Deploy backend til Render.com eller Railway.app<br>
+            ⚠️ <strong>Demo-modus (Simulert AI)</strong><br><br>
+            Backend er ikke konfigurert, men du kan teste chat-interfacet!<br>
+            Svarene er simulert, ikke ekte AI.<br><br>
+            <strong>For ekte AI-chat:</strong><br>
+            1. Deploy backend til Render.com<br>
             2. Sett <code>window.AI_BACKEND_URL</code> i config.js<br>
-            3. Legg til Claude API-nøkkel og OpenAI API-nøkkel<br><br>
-            <em>Se QUICK_START_AI_BACKEND.md for instruksjoner.</em>
+            3. Legg til Claude + OpenAI API-nøkler<br><br>
+            <em>Prøv å skrive noe! 👇</em>
         `);
 
-        // Disable input
-        userInput.disabled = true;
-        sendBtn.disabled = true;
-        userInput.placeholder = 'Backend ikke konfigurert - se instruksjoner over';
+        // ENABLE input for demo
+        userInput.disabled = false;
+        sendBtn.disabled = false;
+        userInput.placeholder = 'Test chat-interfacet her... (simulerte svar)';
 
-        return false;
+        return false; // Demo mode
     }
 
     try {
