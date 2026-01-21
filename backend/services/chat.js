@@ -1,7 +1,14 @@
 import Anthropic from '@anthropic-ai/sdk';
 
+// Debug: Sjekk API-nøkkel
+const apiKey = process.env.ANTHROPIC_API_KEY;
+console.log('🔑 Anthropic API Key status:');
+console.log(`   Exists: ${!!apiKey}`);
+console.log(`   Length: ${apiKey ? apiKey.length : 0}`);
+console.log(`   Starts with: ${apiKey ? apiKey.substring(0, 15) + '...' : 'MISSING'}`);
+
 const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
+  apiKey: apiKey,
 });
 
 // ============================================
