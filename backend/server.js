@@ -67,6 +67,28 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Debug endpoint - sjekk API-nøkler
+app.get('/debug/keys', (req, res) => {
+  const anthropicKey = process.env.ANTHROPIC_API_KEY;
+  const openaiKey = process.env.OPENAI_API_KEY;
+
+  res.json({
+    anthropic: {
+      exists: !!anthropicKey,
+      length: anthropicKey ? anthropicKey.length : 0,
+      prefix: anthropicKey ? anthropicKey.substring(0, 20) + '...' : 'MISSING',
+      valid_format: anthropicKey ? anthropicKey.startsWith('sk-ant-api03-') : false
+    },
+    openai: {
+      exists: !!openaiKey,
+      length: openaiKey ? openaiKey.length : 0,
+      prefix: openaiKey ? openaiKey.substring(0, 15) + '...' : 'MISSING',
+      valid_format: openaiKey ? (openaiKey.startsWith('sk-proj-') || openaiKey.startsWith('sk-')) : false
+    },
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 // Analyser bilde (standard respons)
 app.post('/api/analyze', upload.single('image'), async (req, res) => {
   try {
