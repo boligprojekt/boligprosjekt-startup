@@ -40,12 +40,12 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
     // Lokal utvikling
     window.AI_BACKEND_URL = 'http://localhost:3001';
 } else {
-    // Produksjon - sett til din deployed backend URL
-    // Eksempel: 'https://boligprosjekt-ai.onrender.com'
-    window.AI_BACKEND_URL = ''; // TOM = Demo-modus (ingen backend)
+    // Produksjon - EKTE AI-BACKEND!
+    window.AI_BACKEND_URL = 'https://boligprosjekt-ai.onrender.com';
 }
 
-console.log('🔧 AI Backend URL:', window.AI_BACKEND_URL || 'DEMO-MODUS (ingen backend)');
+console.log('🔧 AI Backend URL:', window.AI_BACKEND_URL);
+console.log('🤖 Ekte AI aktivert: Claude Opus + DALL-E 3');
 
 // Vent på at Supabase er lastet, deretter initialiser client
 (function initSupabase() {
