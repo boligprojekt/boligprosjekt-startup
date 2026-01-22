@@ -6,59 +6,89 @@
     <title>Håndverkerprofil - BoligProsjekt</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        body {
+            background: linear-gradient(to bottom, #f8fafc, #ffffff);
+        }
+
         .profile-container {
-            max-width: 1000px;
-            margin: 100px auto;
+            max-width: 1200px;
+            margin: 120px auto 64px;
             padding: 0 24px;
         }
 
         .profile-header {
-            background: white;
-            border-radius: 16px;
-            padding: 40px;
-            margin-bottom: 32px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 64px;
         }
 
         .profile-header h1 {
-            font-size: 32px;
+            font-size: 48px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 16px;
+            color: #0f172a;
+        }
+
+        .profile-header p {
+            font-size: 20px;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .subscription-badge {
             display: inline-block;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 16px;
             font-weight: 600;
-            margin-bottom: 24px;
+            margin-top: 16px;
         }
 
         .subscription-badge.basic {
-            background: #e2e8f0;
+            background: #f1f5f9;
             color: #64748b;
         }
 
         .subscription-badge.pro {
-            background: #dbeafe;
-            color: #3b82f6;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
         }
 
         .subscription-badge.pro-plus {
-            background: #ede9fe;
-            color: #8b5cf6;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
         }
 
-        .profile-form {
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .profile-card {
             background: white;
             border-radius: 16px;
             padding: 40px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .profile-card h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 24px;
         }
 
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
@@ -66,17 +96,19 @@
             font-weight: 600;
             margin-bottom: 8px;
             color: #0f172a;
+            font-size: 14px;
         }
 
         .form-group input,
         .form-group textarea,
         .form-group select {
             width: 100%;
-            padding: 12px 16px;
+            padding: 14px 16px;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
             font-size: 16px;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         .form-group input:focus,
@@ -84,15 +116,16 @@
         .form-group select:focus {
             outline: none;
             border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .form-group textarea {
-            min-height: 120px;
+            min-height: 100px;
             resize: vertical;
         }
 
         .btn-primary {
-            background: #3b82f6;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
             color: white;
             padding: 16px 32px;
             border: none;
@@ -100,11 +133,13 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .btn-primary:hover {
-            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
         }
 
         .btn-secondary {
@@ -122,44 +157,78 @@
 
         .btn-secondary:hover {
             background: #eff6ff;
+            transform: translateY(-2px);
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 24px;
-            margin-bottom: 32px;
+            margin-bottom: 48px;
         }
 
         .stat-card {
             background: white;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
         }
 
         .stat-value {
-            font-size: 32px;
+            font-size: 48px;
             font-weight: 700;
-            color: #3b82f6;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 8px;
         }
 
         .stat-label {
             color: #64748b;
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-secondary {
+                margin-left: 0;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav style="background: white; border-bottom: 1px solid #e2e8f0; padding: 20px 0; position: fixed; top: 0; width: 100%; z-index: 1000;">
-        <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html" style="font-size: 24px; font-weight: 700; color: #3b82f6; text-decoration: none;">BoligProsjekt</a>
-            <div style="display: flex; gap: 32px; align-items: center;">
-                <a href="handverker-prosjekter.html" style="color: #64748b; text-decoration: none;">Prosjekter</a>
-                <a href="handverker-profil.html" style="color: #3b82f6; text-decoration: none; font-weight: 600;">Min Profil</a>
-                <a href="#" onclick="logout()" style="color: #64748b; text-decoration: none;">Logg ut</a>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span class="logo-text">BoligProsjekt</span>
+                </a>
+                <div class="nav-links" id="profilNavLinks">
+                    <!-- Will be populated by simple-auth.js -->
+                </div>
             </div>
         </div>
     </nav>
@@ -168,8 +237,8 @@
         <!-- Header -->
         <div class="profile-header">
             <h1>Min Håndverkerprofil</h1>
+            <p>Administrer din profil og abonnement</p>
             <span class="subscription-badge pro" id="subscriptionBadge">Pro Håndverker</span>
-            <p style="color: #64748b;">Administrer din profil og abonnement</p>
         </div>
 
         <!-- Statistikk -->
@@ -193,10 +262,10 @@
         </div>
 
         <!-- Profilskjema -->
-        <div class="profile-form">
-            <h2 style="margin-bottom: 32px;">Profilinformasjon</h2>
-
-            <form id="profileForm">
+        <div class="content-grid">
+            <div class="profile-card">
+                <h2>Profilinformasjon</h2>
+                <form id="profileForm">
                 <div class="form-group">
                     <label for="companyName">Firmanavn *</label>
                     <input type="text" id="companyName" required placeholder="Eks: Oslo Rørlegger AS">
@@ -250,14 +319,63 @@
                     <input type="url" id="website" placeholder="https://www.firma.no">
                 </div>
 
-                <div style="margin-top: 32px;">
-                    <button type="submit" class="btn-primary">Lagre endringer</button>
-                    <button type="button" class="btn-secondary" onclick="window.location.href='pricing.html'">Endre abonnement</button>
+                    <div class="action-buttons">
+                        <button type="submit" class="btn-primary">Lagre endringer</button>
+                        <button type="button" class="btn-secondary" onclick="window.location.href='pricing.html'">Endre abonnement</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Abonnementsinformasjon -->
+            <div class="profile-card">
+                <h2>Abonnement</h2>
+                <div style="margin-bottom: 24px;">
+                    <span class="subscription-badge pro" id="subscriptionBadge2">Pro Håndverker</span>
                 </div>
-            </form>
+                <div style="color: #64748b; margin-bottom: 24px;">
+                    <p style="margin-bottom: 12px;"><strong style="color: #0f172a;">Pris:</strong> 299 kr/måned</p>
+                    <p style="margin-bottom: 12px;"><strong style="color: #0f172a;">Neste faktura:</strong> 22. februar 2026</p>
+                    <p style="margin-bottom: 12px;"><strong style="color: #0f172a;">Status:</strong> <span style="color: #10b981; font-weight: 600;">Aktiv</span></p>
+                </div>
+                <div style="padding: 20px; background: #f8fafc; border-radius: 12px; margin-bottom: 24px;">
+                    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #0f172a;">Inkludert i din plan:</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="padding: 8px 0; color: #475569;">✓ Øverst i søkeresultater</li>
+                        <li style="padding: 8px 0; color: #475569;">✓ Varslinger om nye prosjekter</li>
+                        <li style="padding: 8px 0; color: #475569;">✓ Premium badge</li>
+                    </ul>
+                </div>
+                <button type="button" class="btn-primary" style="width: 100%;" onclick="window.location.href='pricing.html'">Oppgrader til Pro+</button>
+            </div>
         </div>
     </div>
 
+    <script src="simple-auth.js"></script>
+    <script>
+        // Oppdater navigasjon for profil-siden
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.getElementById('profilNavLinks');
+            const user = window.simpleAuth.getUser();
+
+            if (user) {
+                const displayName = user.email.split('@')[0];
+                const planBadge = user.subscription.plan === 'free' ? '' :
+                                 `<span style="background: #10b981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; margin-left: 8px;">${user.subscription.plan.toUpperCase()}</span>`;
+
+                navLinks.innerHTML = `
+                    <a href="handverker-prosjekter.html" class="nav-link">Prosjekter</a>
+                    <a href="prosjekter.html" class="nav-link">Mine Prosjekter</a>
+                    <a href="#" class="nav-link" onclick="window.simpleAuth.logout(); return false;">Logg ut</a>
+                    <span class="nav-link" style="color: #0f172a; font-weight: 600;">
+                        ${displayName}${planBadge}
+                    </span>
+                `;
+            } else {
+                // Ikke innlogget - omdiriger til login
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
     <script src="handverker-profil.js"></script>
 </body>
 </html>

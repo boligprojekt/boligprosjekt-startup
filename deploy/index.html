@@ -166,9 +166,20 @@
 
             <!-- Pricing Section -->
             <div style="margin-bottom: 64px;">
-                <h2 class="section-title" style="text-align: center; margin-bottom: 48px;">Velg din plan</h2>
+                <h2 class="section-title" style="text-align: center; margin-bottom: 24px;">Velg din plan</h2>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; max-width: 1000px; margin: 0 auto;">
+                <!-- Toggle for Kunde/Håndverker -->
+                <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 48px;">
+                    <button id="customerPlanBtn" onclick="showCustomerPlans()" style="padding: 12px 32px; border: 2px solid #3b82f6; background: #3b82f6; color: white; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                        For Boligeiere
+                    </button>
+                    <button id="craftsmanPlanBtn" onclick="showCraftsmanPlans()" style="padding: 12px 32px; border: 2px solid #e2e8f0; background: white; color: #0f172a; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                        For Håndverkere
+                    </button>
+                </div>
+
+                <!-- Kundeplaner -->
+                <div id="customerPlans" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; max-width: 1000px; margin: 0 auto;">
                     <!-- Gratis Plan -->
                     <div style="background: white; border: 2px solid #e2e8f0; border-radius: 16px; padding: 40px 32px; transition: all 0.3s ease;">
                         <h3 style="font-size: 24px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Gratis</h3>
@@ -223,7 +234,88 @@
                         </a>
                     </div>
                 </div>
+
+                <!-- Håndverkerplaner (skjult som standard) -->
+                <div id="craftsmanPlans" style="display: none; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; max-width: 1000px; margin: 0 auto;">
+                    <!-- Basic Plan -->
+                    <div style="background: white; border: 2px solid #e2e8f0; border-radius: 16px; padding: 40px 32px; transition: all 0.3s ease;">
+                        <h3 style="font-size: 24px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Basic</h3>
+                        <div style="margin-bottom: 24px;">
+                            <span style="font-size: 48px; font-weight: 700; color: #0f172a;">299 kr</span>
+                            <span style="color: #64748b;">/måned</span>
+                        </div>
+                        <ul style="list-style: none; padding: 0; margin-bottom: 32px;">
+                            <li style="padding: 12px 0; border-bottom: 1px solid #f1f5f9; color: #475569;">✓ Synlighet i søk</li>
+                            <li style="padding: 12px 0; border-bottom: 1px solid #f1f5f9; color: #475569;">✓ Standard plassering</li>
+                            <li style="padding: 12px 0; border-bottom: 1px solid #f1f5f9; color: #94a3b8;">✗ Ingen prioritering</li>
+                        </ul>
+                        <a href="registrer.html" style="display: block; text-align: center; background: #f1f5f9; color: #0f172a; padding: 16px; border-radius: 8px; font-weight: 600; text-decoration: none;">
+                            Velg Basic
+                        </a>
+                    </div>
+
+                    <!-- Pro Håndverker Plan -->
+                    <div style="background: white; border: 2px solid #3b82f6; border-radius: 16px; padding: 40px 32px; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2); position: relative;">
+                        <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #3b82f6; color: white; padding: 4px 16px; border-radius: 20px; font-size: 12px; font-weight: 700;">
+                            MEST POPULÆR
+                        </div>
+                        <h3 style="font-size: 24px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Pro Håndverker</h3>
+                        <div style="margin-bottom: 24px;">
+                            <span style="font-size: 48px; font-weight: 700; color: #0f172a;">299 kr</span>
+                            <span style="color: #64748b;">/måned</span>
+                        </div>
+                        <ul style="list-style: none; padding: 0; margin-bottom: 32px;">
+                            <li style="padding: 12px 0; border-bottom: 1px solid #f1f5f9; color: #475569;">✓ Øverst i søkeresultater</li>
+                            <li style="padding: 12px 0; border-bottom: 1px solid #f1f5f9; color: #475569;">✓ Varslinger om nye prosjekter</li>
+                            <li style="padding: 12px 0; border-bottom: 1px solid #f1f5f9; color: #475569;">✓ Premium badge</li>
+                        </ul>
+                        <a href="registrer.html" style="display: block; text-align: center; background: #3b82f6; color: white; padding: 16px; border-radius: 8px; font-weight: 600; text-decoration: none;">
+                            Velg Pro
+                        </a>
+                    </div>
+
+                    <!-- Pro+ Håndverker Plan -->
+                    <div style="background: white; border: 2px solid #e2e8f0; border-radius: 16px; padding: 40px 32px; transition: all 0.3s ease;">
+                        <h3 style="font-size: 24px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Pro+ Håndverker</h3>
+                        <div style="margin-bottom: 24px;">
+                            <span style="font-size: 48px; font-weight: 700; color: #0f172a;">699 kr</span>
+                            <span style="color: #64748b;">/måned</span>
+                        </div>
+                        <ul style="list-style: none; padding: 0; margin-bottom: 32px;">
+                            <li style="padding: 12px 0; border-bottom: 1px solid #f1f5f9; color: #475569;">✓ Alt fra Pro</li>
+                            <li style="padding: 12px 0; border-bottom: 1px solid #f1f5f9; color: #475569;">✓ 2 garanterte leads/måned</li>
+                            <li style="padding: 12px 0; border-bottom: 1px solid #f1f5f9; color: #475569;">✓ Prioritert support</li>
+                        </ul>
+                        <a href="registrer.html" style="display: block; text-align: center; background: #0f172a; color: white; padding: 16px; border-radius: 8px; font-weight: 600; text-decoration: none;">
+                            Velg Pro+
+                        </a>
+                    </div>
+                </div>
             </div>
+
+            <script>
+                function showCustomerPlans() {
+                    document.getElementById('customerPlans').style.display = 'grid';
+                    document.getElementById('craftsmanPlans').style.display = 'none';
+                    document.getElementById('customerPlanBtn').style.background = '#3b82f6';
+                    document.getElementById('customerPlanBtn').style.color = 'white';
+                    document.getElementById('customerPlanBtn').style.borderColor = '#3b82f6';
+                    document.getElementById('craftsmanPlanBtn').style.background = 'white';
+                    document.getElementById('craftsmanPlanBtn').style.color = '#0f172a';
+                    document.getElementById('craftsmanPlanBtn').style.borderColor = '#e2e8f0';
+                }
+
+                function showCraftsmanPlans() {
+                    document.getElementById('customerPlans').style.display = 'none';
+                    document.getElementById('craftsmanPlans').style.display = 'grid';
+                    document.getElementById('craftsmanPlanBtn').style.background = '#3b82f6';
+                    document.getElementById('craftsmanPlanBtn').style.color = 'white';
+                    document.getElementById('craftsmanPlanBtn').style.borderColor = '#3b82f6';
+                    document.getElementById('customerPlanBtn').style.background = 'white';
+                    document.getElementById('customerPlanBtn').style.color = '#0f172a';
+                    document.getElementById('customerPlanBtn').style.borderColor = '#e2e8f0';
+                }
+            </script>
 
             <!-- Features -->
             <div class="features">

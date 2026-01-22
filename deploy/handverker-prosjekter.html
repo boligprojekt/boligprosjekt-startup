@@ -175,10 +175,8 @@
     <nav style="background: white; border-bottom: 1px solid #e2e8f0; padding: 20px 0; position: fixed; top: 0; width: 100%; z-index: 1000;">
         <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center;">
             <a href="index.html" style="font-size: 24px; font-weight: 700; color: #3b82f6; text-decoration: none;">BoligProsjekt</a>
-            <div style="display: flex; gap: 32px; align-items: center;">
-                <a href="handverker-prosjekter.html" style="color: #3b82f6; text-decoration: none; font-weight: 600;">Prosjekter</a>
-                <a href="handverker-profil.html" style="color: #64748b; text-decoration: none;">Min Profil</a>
-                <a href="#" onclick="logout()" style="color: #64748b; text-decoration: none;">Logg ut</a>
+            <div id="handverkerNavLinks" style="display: flex; gap: 32px; align-items: center;">
+                <!-- Will be populated by JavaScript -->
             </div>
         </div>
     </nav>
@@ -227,6 +225,35 @@
     </div>
 
     <script src="simple-auth.js"></script>
+    <script>
+        // Oppdater navigasjon basert på innloggingsstatus
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.getElementById('handverkerNavLinks');
+            const user = window.simpleAuth.getUser();
+
+            if (user) {
+                // Innlogget - vis full navigasjon
+                const displayName = user.email.split('@')[0];
+                const planBadge = user.subscription.plan === 'free' ? '' :
+                                 `<span style="background: #10b981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; margin-left: 8px;">${user.subscription.plan.toUpperCase()}</span>`;
+
+                navLinks.innerHTML = `
+                    <a href="handverker-prosjekter.html" style="color: #3b82f6; text-decoration: none; font-weight: 600;">Prosjekter</a>
+                    <a href="prosjekter.html" style="color: #64748b; text-decoration: none;">Mine Prosjekter</a>
+                    <a href="#" onclick="window.simpleAuth.logout(); return false;" style="color: #64748b; text-decoration: none;">Logg ut</a>
+                    <span style="color: #0f172a; font-weight: 600;">
+                        ${displayName}${planBadge}
+                    </span>
+                `;
+            } else {
+                // Ikke innlogget - vis kun Hjem og Logg inn
+                navLinks.innerHTML = `
+                    <a href="index.html" style="color: #64748b; text-decoration: none; font-weight: 600;">Hjem</a>
+                    <a href="login.html" style="color: #3b82f6; text-decoration: none; font-weight: 600;">Logg inn</a>
+                `;
+            }
+        });
+    </script>
     <script src="handverker-prosjekter.js"></script>
 </body>
 </html>
