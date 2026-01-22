@@ -18,10 +18,8 @@
                     </svg>
                     <span class="logo-text">BoligProsjekt</span>
                 </a>
-                <div class="nav-links">
-                    <a href="om.html" class="nav-link">Om oss</a>
-                    <a href="login.html" class="nav-link">Logg inn</a>
-                    <a href="planlegger.html" class="btn-primary">Start planlegging →</a>
+                <div class="nav-links" id="planleggerNavLinks">
+                    <!-- Will be populated by simple-auth.js -->
                 </div>
             </div>
         </div>
@@ -210,7 +208,35 @@
     </div>
 
     <script src="config.js"></script>
+    <script src="simple-auth.js"></script>
     <script src="subscription-check.js"></script>
+    <script>
+        // Oppdater navigasjon for planlegger-siden
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.getElementById('planleggerNavLinks');
+            const user = window.simpleAuth.getUser();
+
+            if (user) {
+                const displayName = user.email.split('@')[0];
+                const planBadge = user.subscription.plan === 'free' ? '' :
+                                 `<span style="background: #10b981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; margin-left: 8px;">${user.subscription.plan.toUpperCase()}</span>`;
+
+                navLinks.innerHTML = `
+                    <a href="handverker-prosjekter.html" class="nav-link">Prosjekter</a>
+                    <a href="prosjekter.html" class="nav-link">Mine Prosjekter</a>
+                    <a href="#" class="nav-link" onclick="window.simpleAuth.logout(); return false;">Logg ut</a>
+                    <span class="nav-link" style="color: #0f172a; font-weight: 600;">
+                        ${displayName}${planBadge}
+                    </span>
+                `;
+            } else {
+                navLinks.innerHTML = `
+                    <a href="om.html" class="nav-link">Om oss</a>
+                    <a href="login.html" class="nav-link">Logg inn</a>
+                `;
+            }
+        });
+    </script>
     <script src="planlegger.js"></script>
 </body>
 </html>

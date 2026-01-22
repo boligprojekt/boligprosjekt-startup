@@ -165,6 +165,13 @@ function formatBudget(min, max) {
 }
 
 function contactCustomer(projectId) {
+    // Sjekk om bruker er logget inn
+    const user = localStorage.getItem('boligprosjekt_user');
+    if (!user) {
+        window.location.href = 'login.html';
+        return;
+    }
+
     // TODO: Sjekk håndverkerens abonnement
     // Pro+ får direkte kontakt, Pro får notifikasjon, Basic får begrenset tilgang
     console.log('Kontakter kunde for prosjekt:', projectId);
@@ -172,6 +179,13 @@ function contactCustomer(projectId) {
 }
 
 function viewProjectDetails(projectId) {
+    // Sjekk om bruker er logget inn
+    const user = localStorage.getItem('boligprosjekt_user');
+    if (!user) {
+        window.location.href = 'login.html';
+        return;
+    }
+
     console.log('Viser detaljer for prosjekt:', projectId);
     alert('Detaljvisning kommer snart!');
 }

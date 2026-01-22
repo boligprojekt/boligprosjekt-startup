@@ -116,6 +116,12 @@ async function canAccessCraftsmanSearch() {
 
 // Vis oppgraderingsmelding
 function showUpgradeModal(reason, data) {
+    // Fjern eksisterende modal hvis den finnes
+    const existingModal = document.getElementById('upgradeModal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+
     const modal = document.createElement('div');
     modal.id = 'upgradeModal';
     modal.style.cssText = `
@@ -129,7 +135,7 @@ function showUpgradeModal(reason, data) {
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 10000;
+        z-index: 999999;
         animation: fadeIn 0.2s ease-out;
     `;
 
@@ -248,7 +254,7 @@ function showUpgradeModal(reason, data) {
                 ${title}
             </h2>
             ${message}
-            <div style="display: flex; gap: 16px; margin-top: 32px;">
+            <div style="display: flex; gap: 16px; margin-top: 32px; position: relative; z-index: 1000000;">
                 <button
                     id="modalPrimaryBtn"
                     style="
@@ -263,6 +269,9 @@ function showUpgradeModal(reason, data) {
                         cursor: pointer;
                         transition: all 0.2s;
                         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                        pointer-events: auto;
+                        position: relative;
+                        z-index: 1000001;
                     "
                     onmouseover="this.style.background='#2563eb'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 6px -1px rgba(0, 0, 0, 0.1)'"
                     onmouseout="this.style.background='#3b82f6'; this.style.transform='translateY(0)'; this.style.boxShadow='none'"
@@ -271,7 +280,6 @@ function showUpgradeModal(reason, data) {
                 </button>
                 <button
                     id="modalCancelBtn"
-                    onclick="closeUpgradeModal()"
                     style="
                         flex: 1;
                         padding: 16px 32px;
@@ -284,6 +292,9 @@ function showUpgradeModal(reason, data) {
                         cursor: pointer;
                         transition: all 0.2s;
                         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                        pointer-events: auto;
+                        position: relative;
+                        z-index: 1000001;
                     "
                     onmouseover="this.style.borderColor='#cbd5e1'; this.style.color='#475569'"
                     onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#64748b'"
@@ -296,15 +307,25 @@ function showUpgradeModal(reason, data) {
 
     document.body.appendChild(modal);
 
-    // Legg til event listener på primary button
+    // Legg til event listeners på knappene
     setTimeout(() => {
         const primaryBtn = document.getElementById('modalPrimaryBtn');
+        const cancelBtn = document.getElementById('modalCancelBtn');
+
         if (primaryBtn) {
-            primaryBtn.addEventListener('click', () => {
+            primaryBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 if (primaryButtonAction.includes('window.location.href')) {
                     const url = primaryButtonAction.match(/'([^']+)'/)[1];
                     window.location.href = url;
                 }
+            });
+        }
+
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeUpgradeModal();
             });
         }
     }, 0);

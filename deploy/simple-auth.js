@@ -79,8 +79,6 @@ function updateSimpleNavigation() {
                          `<span style="background: #10b981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; margin-left: 8px;">${user.subscription.plan.toUpperCase()}</span>`;
 
         navLinks.innerHTML = `
-            <a href="pricing.html" class="nav-link">Priser</a>
-            <a href="ai-chat.html" class="nav-link">AI Chat</a>
             <a href="handverker-prosjekter.html" class="nav-link">Prosjekter</a>
             <a href="prosjekter.html" class="nav-link">Mine Prosjekter</a>
             <a href="#" class="nav-link" onclick="simpleLogout(); return false;">Logg ut</a>
@@ -91,8 +89,6 @@ function updateSimpleNavigation() {
     } else {
         navLinks.innerHTML = `
             <a href="om.html" class="nav-link">Om oss</a>
-            <a href="pricing.html" class="nav-link">Priser</a>
-            <a href="ai-chat.html" class="nav-link">AI Chat</a>
             <a href="handverker-prosjekter.html" class="nav-link">Prosjekter</a>
             <a href="login.html" class="nav-link">Logg inn</a>
             <a href="planlegger.html" class="btn-primary">Start planlegging →</a>
