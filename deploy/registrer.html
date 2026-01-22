@@ -71,20 +71,152 @@
 
                 <div class="form-group">
                     <label for="confirmPassword" class="form-label">Bekreft passord</label>
-                    <input 
-                        type="password" 
-                        id="confirmPassword" 
-                        class="form-input" 
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        class="form-input"
                         placeholder="Gjenta passord"
                         minlength="6"
                         required
                     >
                 </div>
 
+                <!-- Håndverker registrering -->
+                <div class="form-group" style="border-top: 1px solid #e2e8f0; padding-top: 24px; margin-top: 24px;">
+                    <label class="checkbox-label" style="display: flex; align-items: flex-start; cursor: pointer;">
+                        <input
+                            type="checkbox"
+                            id="isCraftsman"
+                            style="margin-right: 12px; margin-top: 4px; width: 18px; height: 18px; cursor: pointer;"
+                            onchange="toggleCraftsmanFields()"
+                        >
+                        <div>
+                            <span style="font-weight: 600; color: #0f172a; display: block; margin-bottom: 4px;">
+                                Jeg er håndverker
+                            </span>
+                            <span style="font-size: 14px; color: #64748b;">
+                                Registrer deg som håndverker for å motta prosjekter og leads
+                            </span>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- Håndverker-spesifikke felt (skjult som standard) -->
+                <div id="craftsmanFields" style="display: none; border: 2px solid #3b82f6; border-radius: 12px; padding: 24px; background: #f8fafc; margin-top: 16px;">
+                    <h3 style="font-size: 18px; font-weight: 600; color: #0f172a; margin-bottom: 16px;">
+                        Håndverkerinformasjon
+                    </h3>
+
+                    <div class="form-group">
+                        <label for="companyName" class="form-label">Firmanavn *</label>
+                        <input
+                            type="text"
+                            id="companyName"
+                            class="form-input"
+                            placeholder="Eks: Oslo Rørlegger AS"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profession" class="form-label">Yrke *</label>
+                        <select id="profession" class="form-input">
+                            <option value="">Velg yrke</option>
+                            <option value="plumber">Rørlegger</option>
+                            <option value="electrician">Elektriker</option>
+                            <option value="carpenter">Tømrer</option>
+                            <option value="painter">Maler</option>
+                            <option value="tiler">Flislegger</option>
+                            <option value="general">Generell håndverker</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Telefon *</label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            class="form-input"
+                            placeholder="+47 123 45 678"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location" class="form-label">Lokasjon *</label>
+                        <input
+                            type="text"
+                            id="location"
+                            class="form-input"
+                            placeholder="Eks: Oslo"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="serviceAreas" class="form-label">Serviceområder</label>
+                        <input
+                            type="text"
+                            id="serviceAreas"
+                            class="form-input"
+                            placeholder="Eks: Oslo, Bærum, Asker (kommaseparert)"
+                        >
+                        <small style="color: #64748b; font-size: 14px; margin-top: 4px; display: block;">
+                            Områder hvor du tilbyr tjenester
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="certifications" class="form-label">Sertifikater og godkjenninger</label>
+                        <textarea
+                            id="certifications"
+                            class="form-input"
+                            rows="3"
+                            placeholder="Eks: Autorisert rørlegger, Fagbrev tømrer, Elektriker godkjenning"
+                        ></textarea>
+                        <small style="color: #64748b; font-size: 14px; margin-top: 4px; display: block;">
+                            Liste opp dine sertifikater (kommaseparert)
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description" class="form-label">Om deg/firmaet</label>
+                        <textarea
+                            id="description"
+                            class="form-input"
+                            rows="4"
+                            placeholder="Fortell litt om din erfaring og hva du spesialiserer deg på..."
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="website" class="form-label">Nettside (valgfritt)</label>
+                        <input
+                            type="url"
+                            id="website"
+                            class="form-input"
+                            placeholder="https://www.dittfirma.no"
+                        >
+                    </div>
+                </div>
+
                 <button type="submit" class="btn-submit" id="registerBtn">
                     Opprett konto
                 </button>
             </form>
+
+            <script>
+                function toggleCraftsmanFields() {
+                    const checkbox = document.getElementById('isCraftsman');
+                    const fields = document.getElementById('craftsmanFields');
+                    const requiredFields = fields.querySelectorAll('input[id="companyName"], input[id="phone"], input[id="location"], select[id="profession"]');
+
+                    if (checkbox.checked) {
+                        fields.style.display = 'block';
+                        requiredFields.forEach(field => field.required = true);
+                    } else {
+                        fields.style.display = 'none';
+                        requiredFields.forEach(field => field.required = false);
+                    }
+                }
+            </script>
 
             <div class="auth-footer">
                 <p>Har du allerede konto? <a href="login.html" class="auth-link">Logg inn her</a></p>
@@ -99,22 +231,27 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="config.js"></script>
-    <script src="auth.js"></script>
+    <script src="simple-auth.js"></script>
     <script>
         const registerForm = document.getElementById('registerForm');
         const registerBtn = document.getElementById('registerBtn');
         const errorMessage = document.getElementById('errorMessage');
         const successMessage = document.getElementById('successMessage');
 
-        registerForm.addEventListener('submit', async (e) => {
+        // Sjekk om bruker allerede er innlogget
+        const user = window.simpleAuth.getUser();
+        if (user) {
+            window.location.href = 'index.html';
+        }
+
+        registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
+
             const fullName = document.getElementById('fullName').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
+            const isCraftsman = document.getElementById('isCraftsman').checked;
 
             // Skjul meldinger
             errorMessage.style.display = 'none';
@@ -133,37 +270,54 @@
                 return;
             }
 
+            // Valider håndverker-felt hvis valgt
+            if (isCraftsman) {
+                const companyName = document.getElementById('companyName').value;
+                const profession = document.getElementById('profession').value;
+                const phone = document.getElementById('phone').value;
+                const location = document.getElementById('location').value;
+
+                if (!companyName || !profession || !phone || !location) {
+                    errorMessage.textContent = 'Vennligst fyll ut alle påkrevde håndverker-felt';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+            }
+
             // Disable knapp
             registerBtn.disabled = true;
             registerBtn.textContent = 'Oppretter konto...';
 
-            // Registrer bruker
-            const result = await signUp(email, password, fullName);
+            // Registrer bruker (demo-modus)
+            window.simpleAuth.login(email, 'free');
 
-            if (result.success) {
-                successMessage.textContent = 'Konto opprettet! Sjekk e-posten din for bekreftelse.';
-                successMessage.style.display = 'block';
-                registerForm.reset();
-                
-                // Redirect til login etter 3 sekunder
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 3000);
-            } else {
-                errorMessage.textContent = result.error || 'Kunne ikke opprette konto';
-                errorMessage.style.display = 'block';
-                registerBtn.disabled = false;
-                registerBtn.textContent = 'Opprett konto';
+            // Hvis håndverker, lagre ekstra info i localStorage
+            if (isCraftsman) {
+                const craftsmanData = {
+                    company_name: document.getElementById('companyName').value,
+                    profession: document.getElementById('profession').value,
+                    phone: document.getElementById('phone').value,
+                    location: document.getElementById('location').value,
+                    service_areas: document.getElementById('serviceAreas').value,
+                    certifications: document.getElementById('certifications').value,
+                    description: document.getElementById('description').value,
+                    website: document.getElementById('website').value
+                };
+                localStorage.setItem('boligprosjekt_craftsman', JSON.stringify(craftsmanData));
             }
+
+            successMessage.textContent = 'Konto opprettet! Omdirigerer...';
+            successMessage.style.display = 'block';
+
+            // Redirect til planlegger eller håndverkerprofil
+            setTimeout(() => {
+                if (isCraftsman) {
+                    window.location.href = 'handverker-profil.html';
+                } else {
+                    window.location.href = 'planlegger.html';
+                }
+            }, 1500);
         });
-
-        // Sjekk om bruker allerede er innlogget
-        (async () => {
-            const user = await checkAuth();
-            if (user) {
-                window.location.href = 'profil.html';
-            }
-        })();
     </script>
 </body>
 </html>
