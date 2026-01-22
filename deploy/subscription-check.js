@@ -2,7 +2,26 @@
 // ABONNEMENTSKONTROLL - BOLIGPROSJEKT
 // ============================================
 
-// Mock brukerdata for testing
+// Sjekk om bruker er logget inn
+function isUserLoggedIn() {
+    // Sjekk localStorage for bruker
+    const user = localStorage.getItem('boligprosjekt_user');
+    return user !== null;
+}
+
+// Hent bruker fra localStorage
+function getCurrentUser() {
+    const userStr = localStorage.getItem('boligprosjekt_user');
+    if (!userStr) return null;
+
+    try {
+        return JSON.parse(userStr);
+    } catch (e) {
+        return null;
+    }
+}
+
+// Mock brukerdata for testing (hvis logget inn)
 const mockUser = {
     id: 'user123',
     email: 'test@example.com',
@@ -18,6 +37,11 @@ const mockUser = {
 
 // Hent brukerens abonnement
 async function getUserSubscription() {
+    // Sjekk om bruker er logget inn
+    if (!isUserLoggedIn()) {
+        return null;
+    }
+
     // TODO: Hent fra API
     // const response = await fetch('/api/user/subscription');
     // return await response.json();
@@ -28,6 +52,15 @@ async function getUserSubscription() {
 
 // Sjekk om bruker kan opprette nytt prosjekt
 async function canCreateProject() {
+    // Først sjekk om bruker er logget inn
+    if (!isUserLoggedIn()) {
+        return {
+            allowed: false,
+            reason: 'not_logged_in',
+            current_plan: null
+        };
+    }
+
     const subscription = await getUserSubscription();
 
     // Hvis Pro plan (ubegrenset)
@@ -100,8 +133,22 @@ function showUpgradeModal(reason, data) {
 
     let message = '';
     let title = '';
+    let primaryButtonText = 'Se priser';
+    let primaryButtonAction = "window.location.href='pricing.html'";
 
-    if (reason === 'limit_reached') {
+    if (reason === 'not_logged_in') {
+        title = '🔐 Logg inn for å fortsette';
+        message = `
+            <p style="font-size: 18px; color: #64748b; margin-bottom: 24px;">
+                Du må <strong>logge inn</strong> eller <strong>registrere deg</strong> for å opprette prosjekter.
+            </p>
+            <p style="font-size: 16px; color: #64748b; margin-bottom: 32px;">
+                Registrer deg gratis og få tilgang til 1 prosjekt!
+            </p>
+        `;
+        primaryButtonText = 'Logg inn / Registrer';
+        primaryButtonAction = "window.location.href='login.html'";
+    } else if (reason === 'limit_reached') {
         title = '🚀 Oppgrader for flere prosjekter';
         message = `
             <p style="font-size: 18px; color: #64748b; margin-bottom: 24px;">
@@ -130,8 +177,8 @@ function showUpgradeModal(reason, data) {
             </h2>
             ${message}
             <div style="display: flex; gap: 16px;">
-                <button onclick="window.location.href='pricing.html'" style="flex: 1; padding: 16px 32px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
-                    Se priser
+                <button onclick="${primaryButtonAction}" style="flex: 1; padding: 16px 32px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                    ${primaryButtonText}
                 </button>
                 <button onclick="closeUpgradeModal()" style="flex: 1; padding: 16px 32px; background: white; color: #3b82f6; border: 2px solid #3b82f6; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
                     Avbryt

@@ -75,18 +75,22 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="config.js"></script>
-    <script src="auth.js"></script>
+    <script src="simple-auth.js"></script>
     <script>
         const loginForm = document.getElementById('loginForm');
         const loginBtn = document.getElementById('loginBtn');
         const errorMessage = document.getElementById('errorMessage');
         const successMessage = document.getElementById('successMessage');
 
-        loginForm.addEventListener('submit', async (e) => {
+        // Sjekk om bruker allerede er innlogget
+        const user = window.simpleAuth.getUser();
+        if (user) {
+            window.location.href = 'index.html';
+        }
+
+        loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
+
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
@@ -98,32 +102,25 @@
             loginBtn.disabled = true;
             loginBtn.textContent = 'Logger inn...';
 
-            // Logg inn
-            const result = await signIn(email, password);
+            // Demo login - aksepter alle (for testing)
+            if (email && password) {
+                // Logg inn som gratis bruker
+                window.simpleAuth.login(email, 'free');
 
-            if (result.success) {
                 successMessage.textContent = 'Innlogging vellykket! Omdirigerer...';
                 successMessage.style.display = 'block';
-                
-                // Redirect til profil
+
+                // Redirect til planlegger
                 setTimeout(() => {
-                    window.location.href = 'profil.html';
-                }, 1500);
+                    window.location.href = 'planlegger.html';
+                }, 1000);
             } else {
-                errorMessage.textContent = result.error || 'Feil e-post eller passord';
+                errorMessage.textContent = 'Vennligst fyll inn e-post og passord';
                 errorMessage.style.display = 'block';
                 loginBtn.disabled = false;
                 loginBtn.textContent = 'Logg inn';
             }
         });
-
-        // Sjekk om bruker allerede er innlogget
-        (async () => {
-            const user = await checkAuth();
-            if (user) {
-                window.location.href = 'profil.html';
-            }
-        })();
     </script>
 </body>
 </html>

@@ -30,10 +30,35 @@ const diyTips = {
 };
 
 // Initialize
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    // VIKTIG: Sjekk abonnement før brukeren kan starte
+    await checkSubscriptionBeforeStart();
+
     setupEventListeners();
     updateStepDisplay();
 });
+
+// Sjekk abonnement før planlegger starter
+async function checkSubscriptionBeforeStart() {
+    // Sjekk om bruker kan opprette prosjekt
+    const canCreate = await window.subscriptionCheck.canCreateProject();
+
+    if (!canCreate.allowed) {
+        // Vis oppgraderingsmodal
+        window.subscriptionCheck.showUpgradeModal(canCreate.reason, canCreate);
+
+        // Disable alle inputs
+        document.querySelectorAll('input, button, select, .option-btn').forEach(el => {
+            el.disabled = true;
+            el.style.opacity = '0.5';
+            el.style.cursor = 'not-allowed';
+        });
+
+        return false;
+    }
+
+    return true;
+}
 
 function setupEventListeners() {
     // Option buttons (housing type, room type, condition, DIY level)
