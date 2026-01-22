@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Søk Håndverkere - BoligProsjekt</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .search-container {
+            max-width: 1200px;
+            margin: 100px auto;
+            padding: 0 24px;
+        }
+
+        .search-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .search-header h1 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .search-bar {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .search-input-group {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .search-input-group input,
+        .search-input-group select {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+        }
+
+        .search-btn {
+            padding: 16px 48px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: #2563eb;
+        }
+
+        .craftsmen-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .craftsman-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .craftsman-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .craftsman-card.premium {
+            border: 2px solid #3b82f6;
+        }
+
+        .craftsman-card.premium::before {
+            content: '⭐ PREMIUM';
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #3b82f6;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .craftsman-header {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .craftsman-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .craftsman-info h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .craftsman-profession {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .craftsman-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        .craftsman-description {
+            color: #334155;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .craftsman-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .meta-tag {
+            padding: 6px 12px;
+            background: #f1f5f9;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .craftsman-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-contact-craftsman {
+            flex: 1;
+            padding: 12px 24px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-contact-craftsman:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav style="background: white; border-bottom: 1px solid #e2e8f0; padding: 20px 0; position: fixed; top: 0; width: 100%; z-index: 1000;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="font-size: 24px; font-weight: 700; color: #3b82f6; text-decoration: none;">BoligProsjekt</a>
+            <div style="display: flex; gap: 32px; align-items: center;">
+                <a href="planlegger.html" style="color: #64748b; text-decoration: none;">Mine Prosjekter</a>
+                <a href="sok-handverkere.html" style="color: #3b82f6; text-decoration: none; font-weight: 600;">Søk Håndverkere</a>
+                <a href="#" onclick="logout()" style="color: #64748b; text-decoration: none;">Logg ut</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="search-container">
+        <div class="search-header">
+            <h1>Finn riktig håndverker for ditt prosjekt</h1>
+            <p style="color: #64748b; font-size: 18px;">Søk blant kvalifiserte fagfolk i ditt område</p>
+        </div>
+
+        <!-- Søkebar -->
+        <div class="search-bar">
+            <div class="search-input-group">
+                <select id="professionFilter">
+                    <option value="">Alle yrker</option>
+                    <option value="plumber">Rørlegger</option>
+                    <option value="electrician">Elektriker</option>
+                    <option value="carpenter">Snekker</option>
+                    <option value="painter">Maler</option>
+                    <option value="tiler">Flislegger</option>
+                    <option value="general">Generell håndverker</option>
+                </select>
+
+                <input type="text" id="locationSearch" placeholder="Lokasjon (f.eks. Oslo)">
+
+                <button class="search-btn" onclick="searchCraftsmen()">Søk</button>
+            </div>
+        </div>
+
+        <!-- Håndverkerliste -->
+        <div class="craftsmen-grid" id="craftsmenGrid">
+            <!-- Håndverkere lastes dynamisk -->
+        </div>
+    </div>
+
+    <script src="sok-handverkere.js"></script>
+</body>
+</html>
+

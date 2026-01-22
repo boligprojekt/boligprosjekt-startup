@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priser - BoligProsjekt</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .pricing-container {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 24px;
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .pricing-header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #0f172a;
+        }
+
+        .pricing-header p {
+            font-size: 20px;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .pricing-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .toggle-btn {
+            padding: 12px 32px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+            margin-bottom: 64px;
+        }
+
+        .pricing-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 40px 32px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .pricing-card.featured {
+            border-color: #3b82f6;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MEST POPULÆR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #3b82f6;
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .plan-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+
+        .plan-price {
+            font-size: 48px;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 8px;
+        }
+
+        .plan-price span {
+            font-size: 18px;
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        .plan-description {
+            color: #64748b;
+            margin-bottom: 32px;
+            min-height: 48px;
+        }
+
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 32px 0;
+        }
+
+        .plan-features li {
+            padding: 12px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            color: #334155;
+        }
+
+        .plan-features li::before {
+            content: '✓';
+            color: #10b981;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .plan-features li.disabled {
+            opacity: 0.4;
+        }
+
+        .plan-features li.disabled::before {
+            content: '✗';
+            color: #ef4444;
+        }
+
+        .plan-cta {
+            width: 100%;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .plan-cta.primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .plan-cta.primary:hover {
+            background: #2563eb;
+        }
+
+        .plan-cta.secondary {
+            background: white;
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+        }
+
+        .plan-cta.secondary:hover {
+            background: #eff6ff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav style="background: white; border-bottom: 1px solid #e2e8f0; padding: 20px 0; position: fixed; top: 0; width: 100%; z-index: 1000;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="font-size: 24px; font-weight: 700; color: #3b82f6; text-decoration: none;">BoligProsjekt</a>
+            <div style="display: flex; gap: 32px; align-items: center;">
+                <a href="index.html" style="color: #64748b; text-decoration: none;">Hjem</a>
+                <a href="pricing.html" style="color: #3b82f6; text-decoration: none; font-weight: 600;">Priser</a>
+                <a href="login.html" style="color: #64748b; text-decoration: none;">Logg inn</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pricing-container">
+        <!-- Header -->
+        <div class="pricing-header">
+            <h1>Velg riktig plan for deg</h1>
+            <p>Enten du planlegger ditt drømmeprosjekt eller søker nye oppdrag som håndverker</p>
+        </div>
+
+        <!-- Toggle mellom kunde og håndverker -->
+        <div class="pricing-toggle">
+            <button class="toggle-btn active" id="customerToggle">For Boligeiere</button>
+            <button class="toggle-btn" id="craftsmanToggle">For Håndverkere</button>
+        </div>
+
+        <!-- KUNDEPRISER -->
+        <div id="customerPricing" class="pricing-grid">
+            <!-- Gratis Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Gratis</div>
+                <div class="plan-price">0 kr <span>/måned</span></div>
+                <div class="plan-description">Perfekt for å komme i gang med ditt første prosjekt</div>
+                <ul class="plan-features">
+                    <li>1 prosjekt tillatt</li>
+                    <li>Grunnleggende produktforslag</li>
+                    <li class="disabled">AI Chat Designer</li>
+                    <li class="disabled">Hjelp med å finne håndverkere</li>
+                    <li class="disabled">Prioritert kundeservice</li>
+                </ul>
+                <button class="plan-cta secondary" onclick="selectPlan('free')">Kom i gang gratis</button>
+            </div>
+
+            <!-- Premium Plan -->
+            <div class="pricing-card featured">
+                <div class="plan-name">Premium</div>
+                <div class="plan-price">249 kr <span>/måned</span></div>
+                <div class="plan-description">For deg som vil ha AI-hjelp og profesjonell veiledning</div>
+                <ul class="plan-features">
+                    <li>Opptil 5 prosjekter</li>
+                    <li>AI Chat Designer tilgang</li>
+                    <li>Hjelp med å finne kvalifiserte håndverkere</li>
+                    <li>Prioritert kundeservice</li>
+                    <li>Produktanbefalinger</li>
+                </ul>
+                <button class="plan-cta primary" onclick="selectPlan('premium')">Velg Premium</button>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Pro</div>
+                <div class="plan-price">799 kr <span>/måned</span></div>
+                <div class="plan-description">Komplett løsning med personlig veiledning</div>
+                <ul class="plan-features">
+                    <li>Ubegrenset antall prosjekter</li>
+                    <li>Full AI Chat Designer tilgang</li>
+                    <li>Personlig veiledning og konsultasjon</li>
+                    <li>Designhjelp og produktanbefaling</li>
+                    <li>Premium håndverkertjenester</li>
+                    <li>Dedikert prosjektleder</li>
+                </ul>
+                <button class="plan-cta primary" onclick="selectPlan('pro')">Velg Pro</button>
+            </div>
+        </div>
+
+        <!-- HÅNDVERKERPRISER -->
+        <div id="craftsmanPricing" class="pricing-grid" style="display: none;">
+            <!-- Basic Visibility -->
+            <div class="pricing-card">
+                <div class="plan-name">Basic Visibility</div>
+                <div class="plan-price">299 kr <span>/måned</span></div>
+                <div class="plan-description">Kom i gang med synlighet i vårt nettverk</div>
+                <ul class="plan-features">
+                    <li>Synlighet i håndverkersøk</li>
+                    <li>Mulighet til å se tilgjengelige prosjekter</li>
+                    <li>Standard plassering i søkeresultater</li>
+                    <li class="disabled">Premium plassering</li>
+                    <li class="disabled">Prosjektnotifikasjoner</li>
+                    <li class="disabled">Garanterte leads</li>
+                </ul>
+                <button class="plan-cta secondary" onclick="selectPlan('basic_craftsman')">Velg Basic</button>
+            </div>
+
+            <!-- Pro Håndverker -->
+            <div class="pricing-card featured">
+                <div class="plan-name">Pro Håndverker</div>
+                <div class="plan-price">299 kr <span>/måned</span></div>
+                <div class="plan-description">Økt synlighet og prioritert plassering</div>
+                <ul class="plan-features">
+                    <li>Øverst i søkeresultater</li>
+                    <li>Prioritert visning når kunder søker</li>
+                    <li>Prosjektnotifikasjoner</li>
+                    <li>Premium badge på profil</li>
+                    <li>Detaljert prosjektinformasjon</li>
+                    <li class="disabled">Garanterte leads</li>
+                </ul>
+                <button class="plan-cta primary" onclick="selectPlan('pro_craftsman')">Velg Pro</button>
+            </div>
+
+            <!-- Pro+ Håndverker -->
+            <div class="pricing-card">
+                <div class="plan-name">Pro+ Håndverker</div>
+                <div class="plan-price">699 kr <span>/måned</span></div>
+                <div class="plan-description">Maksimal synlighet med garanterte leads</div>
+                <ul class="plan-features">
+                    <li>Alt fra Pro Håndverker</li>
+                    <li>2 garanterte leads per måned</li>
+                    <li>Direkte kontakt med potensielle kunder</li>
+                    <li>Detaljert prosjektinformasjon</li>
+                    <li>Premium support</li>
+                    <li>Prioritert i alle søk</li>
+                </ul>
+                <button class="plan-cta primary" onclick="selectPlan('pro_plus_craftsman')">Velg Pro+</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="pricing.js"></script>
+</body>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Håndverkerprofil - BoligProsjekt</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .profile-container {
+            max-width: 1000px;
+            margin: 100px auto;
+            padding: 0 24px;
+        }
+
+        .profile-header {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .profile-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subscription-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .subscription-badge.basic {
+            background: #e2e8f0;
+            color: #64748b;
+        }
+
+        .subscription-badge.pro {
+            background: #dbeafe;
+            color: #3b82f6;
+        }
+
+        .subscription-badge.pro-plus {
+            background: #ede9fe;
+            color: #8b5cf6;
+        }
+
+        .profile-form {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #3b82f6;
+            padding: 16px 32px;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 16px;
+        }
+
+        .btn-secondary:hover {
+            background: #eff6ff;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav style="background: white; border-bottom: 1px solid #e2e8f0; padding: 20px 0; position: fixed; top: 0; width: 100%; z-index: 1000;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="font-size: 24px; font-weight: 700; color: #3b82f6; text-decoration: none;">BoligProsjekt</a>
+            <div style="display: flex; gap: 32px; align-items: center;">
+                <a href="handverker-prosjekter.html" style="color: #64748b; text-decoration: none;">Prosjekter</a>
+                <a href="handverker-profil.html" style="color: #3b82f6; text-decoration: none; font-weight: 600;">Min Profil</a>
+                <a href="#" onclick="logout()" style="color: #64748b; text-decoration: none;">Logg ut</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        <!-- Header -->
+        <div class="profile-header">
+            <h1>Min Håndverkerprofil</h1>
+            <span class="subscription-badge pro" id="subscriptionBadge">Pro Håndverker</span>
+            <p style="color: #64748b;">Administrer din profil og abonnement</p>
+        </div>
+
+        <!-- Statistikk -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalLeads">0</div>
+                <div class="stat-label">Totale leads</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="activeProjects">0</div>
+                <div class="stat-label">Aktive prosjekter</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="profileViews">0</div>
+                <div class="stat-label">Profilvisninger</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="rating">0.0</div>
+                <div class="stat-label">Gjennomsnittlig rating</div>
+            </div>
+        </div>
+
+        <!-- Profilskjema -->
+        <div class="profile-form">
+            <h2 style="margin-bottom: 32px;">Profilinformasjon</h2>
+
+            <form id="profileForm">
+                <div class="form-group">
+                    <label for="companyName">Firmanavn *</label>
+                    <input type="text" id="companyName" required placeholder="Eks: Oslo Rørlegger AS">
+                </div>
+
+                <div class="form-group">
+                    <label for="profession">Yrke *</label>
+                    <select id="profession" required>
+                        <option value="">Velg yrke</option>
+                        <option value="plumber">Rørlegger</option>
+                        <option value="electrician">Elektriker</option>
+                        <option value="carpenter">Snekker</option>
+                        <option value="painter">Maler</option>
+                        <option value="tiler">Flislegger</option>
+                        <option value="general">Generell håndverker</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Beskrivelse</label>
+                    <textarea id="description" placeholder="Fortell om din erfaring og tjenester..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Telefon *</label>
+                    <input type="tel" id="phone" required placeholder="+47 123 45 678">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-post *</label>
+                    <input type="email" id="email" required placeholder="post@firma.no">
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Lokasjon *</label>
+                    <input type="text" id="location" required placeholder="Oslo">
+                </div>
+
+                <div class="form-group">
+                    <label for="serviceAreas">Dekningsområder (kommaseparert)</label>
+                    <input type="text" id="serviceAreas" placeholder="Oslo, Bærum, Asker">
+                </div>
+
+                <div class="form-group">
+                    <label for="certifications">Sertifiseringer (kommaseparert)</label>
+                    <input type="text" id="certifications" placeholder="Autorisert rørlegger, Fagbrev">
+                </div>
+
+                <div class="form-group">
+                    <label for="website">Nettside</label>
+                    <input type="url" id="website" placeholder="https://www.firma.no">
+                </div>
+
+                <div style="margin-top: 32px;">
+                    <button type="submit" class="btn-primary">Lagre endringer</button>
+                    <button type="button" class="btn-secondary" onclick="window.location.href='pricing.html'">Endre abonnement</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="handverker-profil.js"></script>
+</body>
+</html>
+

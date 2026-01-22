@@ -46,6 +46,15 @@ userInput.addEventListener('input', () => {
 // ============================================
 
 async function sendMessage() {
+    // Sjekk abonnement først (kun hvis ikke i demo-modus)
+    if (BACKEND_URL && BACKEND_URL !== '') {
+        const accessCheck = await window.subscriptionCheck.canAccessAIChat();
+        if (!accessCheck.allowed) {
+            window.subscriptionCheck.showUpgradeModal(accessCheck.reason, accessCheck);
+            return;
+        }
+    }
+
     const message = userInput.value.trim();
     
     if (!message) return;

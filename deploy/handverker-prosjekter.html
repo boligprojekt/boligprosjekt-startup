@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tilgjengelige Prosjekter - BoligProsjekt</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .projects-container {
+            max-width: 1200px;
+            margin: 100px auto;
+            padding: 0 24px;
+        }
+
+        .projects-header {
+            margin-bottom: 32px;
+        }
+
+        .projects-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .filter-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar select,
+        .filter-bar input {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .projects-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            border-color: #3b82f6;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .project-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .project-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .project-badge.new {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .project-badge.urgent {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .project-description {
+            color: #334155;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .project-budget {
+            font-size: 20px;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 16px;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-contact {
+            flex: 1;
+            padding: 12px 24px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-contact:hover {
+            background: #2563eb;
+        }
+
+        .btn-details {
+            padding: 12px 24px;
+            background: white;
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-details:hover {
+            background: #eff6ff;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 64px 24px;
+            color: #64748b;
+        }
+
+        .empty-state h2 {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav style="background: white; border-bottom: 1px solid #e2e8f0; padding: 20px 0; position: fixed; top: 0; width: 100%; z-index: 1000;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="font-size: 24px; font-weight: 700; color: #3b82f6; text-decoration: none;">BoligProsjekt</a>
+            <div style="display: flex; gap: 32px; align-items: center;">
+                <a href="handverker-prosjekter.html" style="color: #3b82f6; text-decoration: none; font-weight: 600;">Prosjekter</a>
+                <a href="handverker-profil.html" style="color: #64748b; text-decoration: none;">Min Profil</a>
+                <a href="#" onclick="logout()" style="color: #64748b; text-decoration: none;">Logg ut</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="projects-container">
+        <div class="projects-header">
+            <h1>Tilgjengelige Prosjekter</h1>
+            <p style="color: #64748b;">Finn ditt neste oppdrag</p>
+        </div>
+
+        <!-- Filter -->
+        <div class="filter-bar">
+            <select id="roomTypeFilter">
+                <option value="">Alle romtyper</option>
+                <option value="kitchen">Kjøkken</option>
+                <option value="bathroom">Bad</option>
+                <option value="bedroom">Soverom</option>
+                <option value="living_room">Stue</option>
+                <option value="other">Annet</option>
+            </select>
+
+            <select id="locationFilter">
+                <option value="">Alle lokasjoner</option>
+                <option value="oslo">Oslo</option>
+                <option value="bergen">Bergen</option>
+                <option value="trondheim">Trondheim</option>
+                <option value="stavanger">Stavanger</option>
+            </select>
+
+            <input type="number" id="budgetMin" placeholder="Min budsjett (kr)">
+            <input type="number" id="budgetMax" placeholder="Maks budsjett (kr)">
+
+            <button class="btn-contact" onclick="applyFilters()" style="flex: 0 0 auto;">Filtrer</button>
+        </div>
+
+        <!-- Prosjektliste -->
+        <div class="projects-grid" id="projectsGrid">
+            <!-- Prosjekter lastes dynamisk -->
+        </div>
+
+        <!-- Tom tilstand -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <h2>Ingen prosjekter funnet</h2>
+            <p>Prøv å justere filtrene dine eller kom tilbake senere</p>
+        </div>
+    </div>
+
+    <script src="handverker-prosjekter.js"></script>
+</body>
+</html>
+
